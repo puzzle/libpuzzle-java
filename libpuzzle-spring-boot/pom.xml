@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <parent>
+        <groupId>ch.puzzle</groupId>
+        <artifactId>libpuzzle-parent</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <artifactId>libpuzzle-spring-boot</artifactId>
+    <name>libpuzzle Spring Boot</name>
+    <description>libpuzzle for Spring Boot</description>
+    <properties>
+        <main.basedir>${basedir}/..</main.basedir>
+    </properties>
+    <modules>
+        <module>libpuzzle-spring-boot-rest</module>
+    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+            <version>2.0.4.RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>
