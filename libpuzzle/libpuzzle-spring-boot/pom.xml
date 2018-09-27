@@ -6,8 +6,9 @@
     <packaging>pom</packaging>
     <parent>
         <groupId>ch.puzzle</groupId>
-        <artifactId>libpuzzle-parent</artifactId>
+        <artifactId>libpuzzle</artifactId>
         <version>${revision}</version>
+        <relativePath>..</relativePath>
     </parent>
     <artifactId>libpuzzle-spring-boot</artifactId>
     <name>libpuzzle Spring Boot</name>
@@ -17,6 +18,7 @@
     </properties>
     <modules>
         <module>libpuzzle-spring-boot-rest</module>
+        <!--<module>libpuzzle-spring-boot-graphql</module>-->
     </modules>
     <dependencies>
         <dependency>
