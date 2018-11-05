@@ -1,6 +1,7 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest;
 
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.*;
+import ch.puzzle.libpuzzle.springframework.boot.rest.filter.FilterSpecificationFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
@@ -21,8 +22,12 @@ public class RestActions {
         return new PageListAction<>(repository, null, dtoClass);
     }
 
-    public <TEntity, TDto> FilteredListAction<TEntity, TDto> filter(JpaSpecificationExecutor<TEntity> repository, Class<TDto> dtoClass) {
-        return new FilteredListAction<>(repository, null, dtoClass);
+    public <TEntity, TDto, TFilter> FilteredListAction<TEntity, TDto, TFilter> filter(
+            JpaSpecificationExecutor<TEntity> repository,
+            Class<TDto> dtoClass,
+            FilterSpecificationFactory<TFilter> filterSpecificationFactory
+    ) {
+        return new FilteredListAction<>(repository, null, dtoClass, filterSpecificationFactory);
     }
 
     public <TEntity, TEntityId, TDto> FindAction<TEntity, TEntityId, TDto> find(

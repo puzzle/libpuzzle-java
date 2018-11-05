@@ -1,11 +1,8 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action;
 
 import ch.puzzle.libpuzzle.springframework.boot.rest.dto.PageDto;
+import ch.puzzle.libpuzzle.springframework.boot.rest.filter.FilterSpecificationFactory;
 import ch.puzzle.libpuzzle.springframework.boot.rest.mapper.DtoMapper;
-import ch.puzzle.libpuzzle.springframework.boot.rest.rsql.RsqlSpecification;
-import com.mathianasj.spring.rsql.CustomRsqlVisitor;
-import cz.jirutka.rsql.parser.RSQLParser;
-import cz.jirutka.rsql.parser.ast.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,12 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class FilteredListAction<TEntity, TDto> {
+public class FilteredListAction<TEntity, TDto, TFilter> {
 
     private JpaSpecificationExecutor<TEntity> repository;
 
@@ -28,41 +23,30 @@ public class FilteredListAction<TEntity, TDto> {
 
     private Class<TDto> dtoClass;
 
-    private RSQLParser rsqlParser;
-
-    private RSQLVisitor<Specification<TEntity>, Void> rsqlVisitor;
+    private FilterSpecificationFactory<TFilter> filterSpecificationFactory;
 
     public FilteredListAction(
             JpaSpecificationExecutor<TEntity> repository,
             DtoMapper mapper,
             Class<TDto> dtoClass,
-            RSQLParser rsqlParser,
-            RSQLVisitor<Specification<TEntity>, Void> rsqlVisitor
+            FilterSpecificationFactory<TFilter> filterSpecificationFactory
     ) {
         this.repository = repository;
         this.mapper = mapper;
         this.dtoClass = dtoClass;
-        this.rsqlParser = rsqlParser;
-        this.rsqlVisitor = rsqlVisitor;
+        this.filterSpecificationFactory = filterSpecificationFactory;
     }
 
-    public FilteredListAction(JpaSpecificationExecutor<TEntity> repository, DtoMapper mapper, Class<TDto> dtoClass) {
-        this(repository, mapper, dtoClass, new RSQLParser(), new CustomRsqlVisitor<>());
+    public ResponseEntity<PageDto<TDto>> execute(TFilter filter) {
+        return execute(filter, Pageable.unpaged());
     }
 
-    public ResponseEntity<PageDto<TDto>> execute(String filterRsql) {
-        return execute(filterRsql, Pageable.unpaged());
+    public ResponseEntity<PageDto<TDto>> execute(TFilter filter, int pageSize, int page, String orderBy) {
+        return execute(filter, createPageable(page, pageSize, orderBy));
     }
 
-    public ResponseEntity<PageDto<TDto>> execute(String filterRsql, int pageSize, int page, String orderBy) {
-        return execute(filterRsql, createPageable(page, pageSize, orderBy));
-    }
-
-    public ResponseEntity<PageDto<TDto>> execute(String filterRsql, Pageable pageable) {
-        Specification<TEntity> specification = Specification.where(null);
-        if (filterRsql != null && filterRsql.length() > 0) {
-            specification = rsqlParser.parse(filterRsql).accept(rsqlVisitor);
-        }
+    public ResponseEntity<PageDto<TDto>> execute(TFilter filter, Pageable pageable) {
+        Specification<TEntity> specification = filterSpecificationFactory.create(filter);
         PageDto<TDto> pageDto = new PageDto<>(
                 pageable.isUnpaged() ? -1 : pageable.getPageNumber(),
                 pageable.isUnpaged() ? -1 : pageable.getPageSize(),
