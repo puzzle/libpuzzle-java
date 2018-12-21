@@ -2,50 +2,49 @@ package ch.puzzle.libpuzzle.springframework.boot.rest;
 
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.*;
 import ch.puzzle.libpuzzle.springframework.boot.rest.filter.FilterSpecificationFactory;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.repository.CrudRepository;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapper.DtoMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RestActions {
+public class RestActions<TEntity, TEntityId> {
 
-    public <TEntity, TDto> CreateAction<TEntity, TDto> create(CrudRepository<TEntity, ?> repository) {
-        return new CreateAction<>(repository, null);
+    private RestRepository<TEntity, TEntityId> repository;
+
+    private DtoMapper mapper;
+
+    public RestActions(RestRepository<TEntity, TEntityId> repository, DtoMapper mapper){
+        this.repository = repository;
+        this.mapper = mapper;
     }
 
-    public <TEntity, TDto> ListAction<TEntity, TDto> list(CrudRepository<TEntity, ?> repository, Class<TDto> dtoClass) {
-        return new ListAction<>(repository, null, dtoClass);
+    public <TResponseDto> CreateAction<TEntity, TResponseDto> create(Class<TResponseDto> responseDtoClass) {
+        return new CreateAction<>(repository, mapper, responseDtoClass);
     }
 
-    public <TEntity, TDto> PageListAction<TEntity, TDto> list(JpaRepository<TEntity, ?> repository, Class<TDto> dtoClass) {
-        return new PageListAction<>(repository, null, dtoClass);
+    public ListAction<TEntity> list() {
+        return new ListAction<>(repository, mapper);
     }
 
-    public <TEntity, TDto, TFilter> FilteredListAction<TEntity, TDto, TFilter> filter(
-            JpaSpecificationExecutor<TEntity> repository,
+    public PageListAction<TEntity> paginate() {
+        return new PageListAction<>(repository, mapper);
+    }
+
+    public <TDto, TFilter> FilteredListAction<TEntity, TDto, TFilter> filter(
             Class<TDto> dtoClass,
             FilterSpecificationFactory<TFilter> filterSpecificationFactory
     ) {
-        return new FilteredListAction<>(repository, null, dtoClass, filterSpecificationFactory);
+        return new FilteredListAction<>(repository, mapper, dtoClass, filterSpecificationFactory);
     }
 
-    public <TEntity, TEntityId, TDto> FindAction<TEntity, TEntityId, TDto> find(
-            CrudRepository<TEntity, TEntityId> repository,
-            Class<TDto> dtoClass
-    ) {
-        return new FindAction<>(repository, null, dtoClass);
+    public <TResponseDto> FindAction<TEntity, TEntityId, TResponseDto> find(Class<TResponseDto> responseDtoClass) {
+        return new FindAction<>(repository, mapper, responseDtoClass);
     }
 
-    public <TEntity, TEntityId, TDto> UpdateAction<TEntity, TEntityId, TDto> update(
-            CrudRepository<TEntity, TEntityId> repository
-    ) {
-        return new UpdateAction<>(repository, null);
+    public <TResponseDto> UpdateAction<TEntity, TEntityId, TResponseDto> update(Class<TResponseDto> responseDtoClass) {
+        return new UpdateAction<>(repository, mapper, responseDtoClass);
     }
 
-    public <TEntity, TEntityId, TDto> DeleteAction<TEntity, TEntityId, TDto> delete(
-            CrudRepository<TEntity, TEntityId> repository
-    ) {
+    public <TResponseDto> DeleteAction<TEntity, TEntityId> delete() {
         return new DeleteAction<>(repository);
     }
 

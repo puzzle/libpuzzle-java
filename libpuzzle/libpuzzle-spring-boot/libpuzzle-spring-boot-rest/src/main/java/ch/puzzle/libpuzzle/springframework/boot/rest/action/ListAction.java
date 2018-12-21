@@ -9,21 +9,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class ListAction<TEntity, TDto> {
+public class ListAction<TEntity> {
 
     protected CrudRepository<TEntity, ?> repository;
 
     protected DtoMapper mapper;
 
-    protected Class<TDto> dtoClass;
-
-    public ListAction(CrudRepository<TEntity, ?> repository, DtoMapper mapper, Class<TDto> dtoClass) {
+    public ListAction(CrudRepository<TEntity, ?> repository, DtoMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
-        this.dtoClass = dtoClass;
     }
 
-    public ResponseEntity<List<TDto>> execute() {
+    public <TDto> ResponseEntity<List<TDto>> execute(Class<TDto> dtoClass) {
         List<TDto> list = StreamSupport.stream(repository.findAll().spliterator(), true)
                 .map(entity -> mapper.map(entity, dtoClass))
                 .collect(Collectors.toList());

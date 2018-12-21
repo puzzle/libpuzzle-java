@@ -14,14 +14,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FilteredListActionTest {
 
-    private FilteredListAction action;
+    private FilteredListAction<Object, Object, String> action;
 
 
     @Mock

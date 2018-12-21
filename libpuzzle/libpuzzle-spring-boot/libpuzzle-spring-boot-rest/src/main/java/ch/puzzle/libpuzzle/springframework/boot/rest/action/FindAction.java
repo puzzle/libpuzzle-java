@@ -7,26 +7,30 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
-public class FindAction<TEntity, TEntityId, TDto> {
+public class FindAction<TEntity, TEntityId, TResponseDto> {
 
     private CrudRepository<TEntity, TEntityId> repository;
 
     private DtoMapper mapper;
 
-    private Class<TDto> dtoClass;
+    private Class<TResponseDto> responseDtoClass;
 
-    public FindAction(CrudRepository<TEntity, TEntityId> repository, DtoMapper mapper, Class<TDto> dtoClass) {
+    public FindAction(
+            CrudRepository<TEntity, TEntityId> repository,
+            DtoMapper mapper,
+            Class<TResponseDto> responseDtoClass
+    ) {
         this.repository = repository;
         this.mapper = mapper;
-        this.dtoClass = dtoClass;
+        this.responseDtoClass = responseDtoClass;
     }
 
-    public ResponseEntity<TDto> execute(TEntityId id) {
+    public ResponseEntity<TResponseDto> execute(TEntityId id) {
         Optional<TEntity> entity = repository.findById(id);
         if (!entity.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        TDto dto = mapper.map(entity.get(), dtoClass);
+        TResponseDto dto = mapper.map(entity.get(), responseDtoClass);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

@@ -7,27 +7,34 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
-public class UpdateAction<TEntity, TEntityId, TDto> {
+public class UpdateAction<TEntity, TEntityId, TResponseDto> {
 
     private CrudRepository<TEntity, TEntityId> repository;
 
     private DtoMapper mapper;
+    private Class<TResponseDto> responseDtoClass;
 
-    public UpdateAction(CrudRepository<TEntity, TEntityId> repository, DtoMapper mapper) {
+    public UpdateAction(
+            CrudRepository<TEntity, TEntityId> repository,
+            DtoMapper mapper,
+            Class<TResponseDto> responseDtoClass
+    ) {
         this.repository = repository;
         this.mapper = mapper;
+        this.responseDtoClass = responseDtoClass;
     }
 
-    public ResponseEntity<TDto> execute(TDto dto, TEntityId id) {
-        Optional<TEntity> optionalEntity = repository.findById(id);
-        if (!optionalEntity.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        TEntity entity = optionalEntity.get();
+    public <TDto> ResponseEntity<TResponseDto> execute(TDto dto, TEntityId id) {
+        return repository.findById(id)
+                .map(entity -> mapAndSave(dto, entity))
+                .map(entity -> mapper.map(entity, responseDtoClass))
+                .map(responseDto -> new ResponseEntity<>(responseDto, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    private <TDto> TEntity mapAndSave(TDto dto, TEntity entity) {
         mapper.map(dto, entity);
-        repository.save(entity);
-        mapper.map(entity, dto);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        return repository.save(entity);
     }
 
 }

@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class PageListAction<TEntity, TDto> extends ListAction<TEntity, TDto> {
+public class PageListAction<TEntity> extends ListAction<TEntity> {
 
     private JpaRepository<TEntity, ?> repository;
 
-    public PageListAction(JpaRepository<TEntity, ?> repository, DtoMapper mapper, Class<TDto> dtoClass) {
-        super(repository, mapper, dtoClass);
+    public PageListAction(JpaRepository<TEntity, ?> repository, DtoMapper mapper) {
+        super(repository, mapper);
         this.repository = repository;
     }
 
@@ -26,7 +26,7 @@ public class PageListAction<TEntity, TDto> extends ListAction<TEntity, TDto> {
         return execute(pageable);
     }*/
 
-    public ResponseEntity<PageDto<TDto>> execute(Pageable pageable) {
+    public <TDto> ResponseEntity<PageDto<TDto>> execute(Class<TDto> dtoClass, Pageable pageable) {
         List<TDto> list = StreamSupport.stream(repository.findAll(pageable).spliterator(), true)
                 .map(entity -> mapper.map(entity, dtoClass))
                 .collect(Collectors.toList());

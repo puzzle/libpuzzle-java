@@ -4,7 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class DeleteAction<TEntity, TEntityId, TDto> {
+public class DeleteAction<TEntity, TEntityId> {
 
     private CrudRepository<TEntity, TEntityId> repository;
 
@@ -12,7 +12,7 @@ public class DeleteAction<TEntity, TEntityId, TDto> {
         this.repository = repository;
     }
 
-    public ResponseEntity<TDto> execute(TEntityId id) {
+    public ResponseEntity<Void> execute(TEntityId id) {
         if (!repository.existsById(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
