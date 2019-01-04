@@ -22,7 +22,6 @@ public class FilteredListActionTest {
 
     private FilteredListAction<Object, Object, String> action;
 
-
     @Mock
     private JpaSpecificationExecutor<Object> repository;
 
