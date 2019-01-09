@@ -11,11 +11,25 @@
     <properties>
         <revision>1.0-SNAPSHOT</revision>
         <main.basedir>${basedir}</main.basedir>
+        <version.mockito>2.22.0</version.mockito>
+        <version.junit>4.12</version.junit>
     </properties>
     <modules>
-        <!--<module>libpuzzle-demo</module>-->
         <module>libpuzzle</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>10</source>
+                    <target>10</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <distributionManagement>
         <snapshotRepository>
