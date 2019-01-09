@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ch.puzzle</groupId>
     <artifactId>libpuzzle-parent</artifactId>
-    <name>libpuzzle</name>
+    <name>libpuzzle Parent</name>
     <packaging>pom</packaging>
     <version>${revision}</version>
     <properties>

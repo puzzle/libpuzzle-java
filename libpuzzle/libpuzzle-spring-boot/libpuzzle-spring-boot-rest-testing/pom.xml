@@ -22,7 +22,7 @@
         <relativePath>..</relativePath>
     </parent>
     <artifactId>libpuzzle-spring-boot-rest-testing</artifactId>
-    <name>libpuzzle Spring Boot REST</name>
+    <name>libpuzzle Spring Boot REST Testing</name>
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>
     </properties>

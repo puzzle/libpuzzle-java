@@ -14,6 +14,7 @@
     </properties>
 
     <artifactId>libpuzzle-demo-spring-boot-rest</artifactId>
+    <name>libpuzzle Demo Spring Boot REST</name>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

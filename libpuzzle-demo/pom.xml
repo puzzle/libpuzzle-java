@@ -10,6 +10,7 @@
         <relativePath>..</relativePath>
     </parent>
     <artifactId>libpuzzle-demo</artifactId>
+    <name>libpuzzle Demo</name>
     <packaging>pom</packaging>
 
     <modules>
