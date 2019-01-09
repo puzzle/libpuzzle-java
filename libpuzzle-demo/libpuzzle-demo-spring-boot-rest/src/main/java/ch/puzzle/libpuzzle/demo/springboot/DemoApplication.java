@@ -1,4 +1,4 @@
-package ch.puzzle.libpuzzle.demo;
+package ch.puzzle.libpuzzle.demo.springboot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
