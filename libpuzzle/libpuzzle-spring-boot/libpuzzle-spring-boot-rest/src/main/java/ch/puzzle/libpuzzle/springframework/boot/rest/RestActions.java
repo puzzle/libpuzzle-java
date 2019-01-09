@@ -3,9 +3,7 @@ package ch.puzzle.libpuzzle.springframework.boot.rest;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.*;
 import ch.puzzle.libpuzzle.springframework.boot.rest.filter.FilterSpecificationFactory;
 import ch.puzzle.libpuzzle.springframework.boot.rest.mapper.DtoMapper;
-import org.springframework.stereotype.Service;
 
-@Service
 public class RestActions<TEntity, TEntityId> {
 
     private RestRepository<TEntity, TEntityId> repository;
@@ -21,12 +19,12 @@ public class RestActions<TEntity, TEntityId> {
         return new CreateAction<>(repository, mapper, responseDtoClass);
     }
 
-    public ListAction<TEntity> list() {
-        return new ListAction<>(repository, mapper);
+    public <TResponseDto> ListAction<TEntity, TResponseDto> list(Class<TResponseDto> responseDtoClass) {
+        return new ListAction<>(repository, mapper, responseDtoClass);
     }
 
-    public PageListAction<TEntity> paginate() {
-        return new PageListAction<>(repository, mapper);
+    public <TResponseDto> PageListAction<TEntity, TResponseDto> paginate(Class<TResponseDto> responseDtoClass) {
+        return new PageListAction<>(repository, mapper, responseDtoClass);
     }
 
     public <TDto, TFilter> FilteredListAction<TEntity, TDto, TFilter> filter(

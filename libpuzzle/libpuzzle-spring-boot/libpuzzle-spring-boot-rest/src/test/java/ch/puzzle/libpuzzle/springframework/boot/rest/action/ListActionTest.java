@@ -10,7 +10,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ListActionTest {
 
-    private ListAction<Object> action;
+    private ListAction<Object, Object> action;
 
     @Mock
     private CrudRepository<Object, String> repository;
@@ -42,7 +41,7 @@ public class ListActionTest {
 
     @Before
     public void setup() {
-        action = new ListAction<>(repository, dtoMapper);
+        action = new ListAction<>(repository, dtoMapper, Object.class);
         when(repository.findAll()).thenReturn(List.of(entityOne, entityTwo));
         when(dtoMapper.map(same(entityOne), eq(Object.class))).thenReturn(responseDtoOne);
         when(dtoMapper.map(same(entityTwo), eq(Object.class))).thenReturn(responseDtoTwo);
@@ -50,7 +49,7 @@ public class ListActionTest {
 
     @Test
     public void testListAll() {
-        var response = action.execute(Object.class);
+        var response = action.execute();
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(2, response.getBody().size());

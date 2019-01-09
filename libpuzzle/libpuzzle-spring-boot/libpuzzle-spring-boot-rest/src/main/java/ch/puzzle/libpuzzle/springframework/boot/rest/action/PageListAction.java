@@ -1,7 +1,7 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action;
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.dto.PageDto;
 import ch.puzzle.libpuzzle.springframework.boot.rest.mapper.DtoMapper;
+import ch.puzzle.libpuzzle.springframework.boot.rest.dto.PageDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
@@ -11,12 +11,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class PageListAction<TEntity> extends ListAction<TEntity> {
+public class PageListAction<TEntity, TResponseDto> extends ListAction<TEntity, TResponseDto> {
 
     private JpaRepository<TEntity, ?> repository;
 
-    public PageListAction(JpaRepository<TEntity, ?> repository, DtoMapper mapper) {
-        super(repository, mapper);
+    public PageListAction(
+            JpaRepository<TEntity, ?> repository,
+            DtoMapper mapper,
+            Class<TResponseDto> responseDtoClass
+    ) {
+        super(repository, mapper, responseDtoClass);
         this.repository = repository;
     }
 
@@ -26,9 +30,9 @@ public class PageListAction<TEntity> extends ListAction<TEntity> {
         return execute(pageable);
     }*/
 
-    public <TDto> ResponseEntity<PageDto<TDto>> execute(Class<TDto> dtoClass, Pageable pageable) {
-        List<TDto> list = StreamSupport.stream(repository.findAll(pageable).spliterator(), true)
-                .map(entity -> mapper.map(entity, dtoClass))
+    public ResponseEntity<PageDto<TResponseDto>> execute(Pageable pageable) {
+        List<TResponseDto> list = StreamSupport.stream(repository.findAll(pageable).spliterator(), true)
+                .map(entity -> mapper.map(entity, responseDtoClass))
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(

@@ -1,8 +1,8 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action;
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.dto.PageDto;
 import ch.puzzle.libpuzzle.springframework.boot.rest.filter.FilterSpecificationFactory;
 import ch.puzzle.libpuzzle.springframework.boot.rest.mapper.DtoMapper;
+import ch.puzzle.libpuzzle.springframework.boot.rest.dto.PageDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

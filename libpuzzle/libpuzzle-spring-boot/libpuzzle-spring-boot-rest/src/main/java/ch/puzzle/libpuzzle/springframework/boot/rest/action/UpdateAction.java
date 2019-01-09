@@ -5,8 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Optional;
-
 public class UpdateAction<TEntity, TEntityId, TResponseDto> {
 
     private CrudRepository<TEntity, TEntityId> repository;
