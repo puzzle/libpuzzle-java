@@ -23,8 +23,8 @@ public class CreateAction<TEntity, TResponseDto> {
             TEntity entity
     ) {
         mapper.map(dto, entity);
-        repository.save(entity);
-        TResponseDto responseDto = mapper.map(entity, responseDtoClass);
+        var persistedEntity = repository.save(entity);
+        TResponseDto responseDto = mapper.map(persistedEntity, responseDtoClass);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 

@@ -27,7 +27,10 @@ public class CreateActionTest {
     private DtoMapper dtoMapper;
 
     @Mock
-    private Object entity;
+    private Object initialEntity;
+
+    @Mock
+    private Object persistedEntity;
 
     @Mock
     private Object requestDto;
@@ -38,17 +41,18 @@ public class CreateActionTest {
     @Before
     public void setup() {
         action = new CreateAction<>(repository, dtoMapper, Object.class);
-        when(dtoMapper.map(same(entity), eq(Object.class))).thenReturn(responseDto);
-        when(repository.save(any())).thenReturn(entity);
+        when(dtoMapper.map(same(persistedEntity), eq(Object.class))).thenReturn(responseDto);
+        when(repository.save(any())).thenReturn(persistedEntity);
     }
 
     @Test
     public void testCreateEntity() {
-        var response = action.execute(requestDto, entity);
+        var response = action.execute(requestDto, initialEntity);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertSame(responseDto, response.getBody());
-        verify(repository).save(same(entity));
-        verify(dtoMapper).map(same(requestDto), same(entity));
+        verify(repository).save(same(initialEntity));
+        verify(dtoMapper).map(same(requestDto), same(initialEntity));
+        verify(dtoMapper).map(same(persistedEntity), eq(Object.class));
     }
 
 }
