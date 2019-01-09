@@ -19,6 +19,7 @@
     <modules>
         <module>libpuzzle-spring-boot-rest</module>
         <module>libpuzzle-spring-boot-rest-testing</module>
+        <module>libpuzzle-spring-boot-graphql</module>
     </modules>
 
 </project>
