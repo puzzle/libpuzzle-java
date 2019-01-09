@@ -17,10 +17,10 @@
         <version.junit>4.12</version.junit>
 
         <!-- Spring versions -->
-        <version.spring>2.1.0.M2</version.spring>
+        <version.java>11</version.java>
         <version.spring-data>2.0.4.RELEASE</version.spring-data>
         <version.spring-web>5.1.3.RELEASE</version.spring-web>
-        <version.spring-boot>2.0.4.RELEASE</version.spring-boot>
+        <version.spring-boot>2.1.1.RELEASE</version.spring-boot>
     </properties>
     <modules>
         <module>libpuzzle</module>
@@ -33,8 +33,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>10</source>
-                    <target>10</target>
+                    <release>${version.java}</release>
+                    <source>${version.java}</source>
+                    <target>${version.java}</target>
                 </configuration>
             </plugin>
         </plugins>
