@@ -1,5 +1,6 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action;
 
+import ch.puzzle.libpuzzle.springframework.boot.rest.IllegalActionParam;
 import ch.puzzle.libpuzzle.springframework.boot.rest.mapper.DtoMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class CreateActionTest {
 
-    private CreateAction<Object, Object> action;
+    private CreateAction<Object> action;
 
     @Mock
     private CrudRepository<Object, String> repository;
@@ -40,19 +41,29 @@ public class CreateActionTest {
 
     @Before
     public void setup() {
-        action = new CreateAction<>(repository, dtoMapper, Object.class);
+        action = new CreateAction<>(repository, dtoMapper);
         when(dtoMapper.map(same(persistedEntity), eq(Object.class))).thenReturn(responseDto);
         when(repository.save(any())).thenReturn(persistedEntity);
     }
 
     @Test
     public void testCreateEntity() {
-        var response = action.execute(requestDto, initialEntity);
+        var response = action.from(requestDto).with(initialEntity).execute(Object.class);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertSame(responseDto, response.getBody());
         verify(repository).save(same(initialEntity));
         verify(dtoMapper).map(same(requestDto), same(initialEntity));
         verify(dtoMapper).map(same(persistedEntity), eq(Object.class));
+    }
+
+    @Test(expected = IllegalActionParam.class)
+    public void testMissingDto() {
+        action.with(initialEntity).execute(Object.class);
+    }
+
+    @Test(expected = IllegalActionParam.class)
+    public void testMissingInitialEntity() {
+        action.from(requestDto).execute(Object.class);
     }
 
 }

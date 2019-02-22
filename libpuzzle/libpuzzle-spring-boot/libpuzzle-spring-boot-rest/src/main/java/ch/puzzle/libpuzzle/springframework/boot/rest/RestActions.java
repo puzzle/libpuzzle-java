@@ -1,49 +1,77 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest;
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.action.*;
-import ch.puzzle.libpuzzle.springframework.boot.rest.filter.FilterSpecificationFactory;
-import ch.puzzle.libpuzzle.springframework.boot.rest.mapper.DtoMapper;
+import ch.puzzle.libpuzzle.springframework.boot.rest.action.ActionFactory;
+import ch.puzzle.libpuzzle.springframework.boot.rest.action.Action;
+import ch.puzzle.libpuzzle.springframework.boot.rest.action.RestActionsConfiguration;
 
-public class RestActions<TEntity, TEntityId> {
+public class RestActions<TListAction, TFindAction, TCreateAction, TUpdateAction, TDeleteAction> {
 
-    private RestRepository<TEntity, TEntityId> repository;
+    private Config config;
 
-    private DtoMapper mapper;
-
-    public RestActions(RestRepository<TEntity, TEntityId> repository, DtoMapper mapper){
-        this.repository = repository;
-        this.mapper = mapper;
+    public RestActions() {
+        config = new Config();
     }
 
-    public <TResponseDto> CreateAction<TEntity, TResponseDto> create(Class<TResponseDto> responseDtoClass) {
-        return new CreateAction<>(repository, mapper, responseDtoClass);
+    public TCreateAction create() {
+        return config.createActionFactory.create();
     }
 
-    public <TResponseDto> ListAction<TEntity, TResponseDto> list(Class<TResponseDto> responseDtoClass) {
-        return new ListAction<>(repository, mapper, responseDtoClass);
+    public TListAction list() {
+        return config.listActionFactory.create();
     }
 
-    public <TResponseDto> PageListAction<TEntity, TResponseDto> paginate(Class<TResponseDto> responseDtoClass) {
-        return new PageListAction<>(repository, mapper, responseDtoClass);
+    public TFindAction find() {
+        return config.findActionFactory.create();
     }
 
-    public <TDto, TFilter> FilteredListAction<TEntity, TDto, TFilter> filter(
-            Class<TDto> dtoClass,
-            FilterSpecificationFactory<TFilter> filterSpecificationFactory
-    ) {
-        return new FilteredListAction<>(repository, mapper, dtoClass, filterSpecificationFactory);
+    public TUpdateAction update() {
+        return config.updateActionFactory.create();
     }
 
-    public <TResponseDto> FindAction<TEntity, TEntityId, TResponseDto> find(Class<TResponseDto> responseDtoClass) {
-        return new FindAction<>(repository, mapper, responseDtoClass);
+    public TDeleteAction delete() {
+        return config.deleteActionFactory.create();
     }
 
-    public <TResponseDto> UpdateAction<TEntity, TEntityId, TResponseDto> update(Class<TResponseDto> responseDtoClass) {
-        return new UpdateAction<>(repository, mapper, responseDtoClass);
+    public Config configure() {
+        return config;
     }
 
-    public <TResponseDto> DeleteAction<TEntity, TEntityId> delete() {
-        return new DeleteAction<>(repository);
-    }
+    public class Config {
 
+        private ActionFactory<TFindAction> findActionFactory = Action::unsupported;
+        private ActionFactory<TCreateAction> createActionFactory = Action::unsupported;
+        private ActionFactory<TUpdateAction> updateActionFactory = Action::unsupported;
+        private ActionFactory<TDeleteAction> deleteActionFactory = Action::unsupported;
+        private ActionFactory<TListAction> listActionFactory = Action::unsupported;
+
+        public Config use(RestActionsConfiguration<TListAction, TFindAction, TCreateAction, TUpdateAction, TDeleteAction> config) {
+            config.apply(this);
+            return this;
+        }
+
+        public Config useFindAction(ActionFactory<TFindAction> findActionFactory) {
+            this.findActionFactory = findActionFactory;
+            return this;
+        }
+
+        public Config useCreateAction(ActionFactory<TCreateAction> createActionFactory) {
+            this.createActionFactory = createActionFactory;
+            return this;
+        }
+
+        public Config useUpdateAction(ActionFactory<TUpdateAction> updateActionFactory) {
+            this.updateActionFactory = updateActionFactory;
+            return this;
+        }
+
+        public Config useDeleteAction(ActionFactory<TDeleteAction> deleteActionFactory) {
+            this.deleteActionFactory = deleteActionFactory;
+            return this;
+        }
+
+        public Config useListAction(ActionFactory<TListAction> listActionFactory) {
+            this.listActionFactory = listActionFactory;
+            return this;
+        }
+    }
 }

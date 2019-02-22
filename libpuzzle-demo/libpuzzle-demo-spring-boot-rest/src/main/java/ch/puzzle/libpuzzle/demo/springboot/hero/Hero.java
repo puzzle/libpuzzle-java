@@ -14,5 +14,6 @@ public class Hero {
     @GeneratedValue
     private Long id;
 
+    private String name;
 
 }

@@ -9,25 +9,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class ListAction<TEntity, TResponseDto> {
+public class ListAction<TEntity> {
 
     protected CrudRepository<TEntity, ?> repository;
 
     protected DtoMapper mapper;
 
-    protected Class<TResponseDto> responseDtoClass;
-
-    public ListAction(CrudRepository<TEntity, ?> repository, DtoMapper mapper, Class<TResponseDto> responseDtoClass) {
+    public ListAction(CrudRepository<TEntity, ?> repository, DtoMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
-        this.responseDtoClass = responseDtoClass;
     }
 
-    public ResponseEntity<List<TResponseDto>> execute() {
+    public <TResponseDto> ResponseEntity<List<TResponseDto>> execute(Class<TResponseDto> responseDtoClass) {
         List<TResponseDto> list = StreamSupport.stream(repository.findAll().spliterator(), true)
                 .map(entity -> mapper.map(entity, responseDtoClass))
                 .collect(Collectors.toList());
-        // FIXME: Make response code configurable
+        // FIXME: Make execute code configurable
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 

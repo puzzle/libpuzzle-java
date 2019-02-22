@@ -1,7 +1,7 @@
 package ch.puzzle.libpuzzle.demo.springboot.hero;
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.RestActions;
-import ch.puzzle.libpuzzle.springframework.boot.rest.mapper.DtoMapper;
+import ch.puzzle.libpuzzle.demo.springboot.common.ApiActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.action.RepositoryActions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,8 +9,11 @@ import org.springframework.context.annotation.Configuration;
 public class HeroConfig {
 
     @Bean
-    public RestActions<Hero, Long> restActions(DtoMapper dtoMapper, HeroRepository repository) {
-        return new RestActions<Hero, Long>(repository, dtoMapper);
+    public ApiActions<Hero> restActions(HeroRepository repository, RepositoryActions repositoryActions) {
+        var actions = new ApiActions<Hero>();
+        actions.configure()
+                .use(repositoryActions.forRepository(repository));
+        return actions;
     }
 
 }

@@ -1,5 +1,6 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action;
 
+import ch.puzzle.libpuzzle.springframework.boot.rest.IllegalActionParam;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +35,7 @@ public class DeleteActionTest {
 
     @Test
     public void testExistingEntity() {
-        var response = action.execute(EXISTING_ENTITY_ID);
+        var response = action.by(EXISTING_ENTITY_ID).execute();
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
         verify(repository).deleteById(EXISTING_ENTITY_ID);
@@ -42,9 +43,14 @@ public class DeleteActionTest {
 
     @Test
     public void testEntityNotFound() {
-        var response = action.execute(NOT_EXISTING_ENTITY_ID);
+        var response = action.by(NOT_EXISTING_ENTITY_ID).execute();
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
         verify(repository, never()).deleteById(any());
+    }
+
+    @Test(expected = IllegalActionParam.class)
+    public void testMissingBy() {
+        action.execute();
     }
 }
