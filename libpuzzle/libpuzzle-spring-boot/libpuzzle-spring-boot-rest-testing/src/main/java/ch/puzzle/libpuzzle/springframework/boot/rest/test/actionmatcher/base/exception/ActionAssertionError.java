@@ -1,14 +1,11 @@
-package ch.puzzle.libpuzzle.springframework.boot.rest.test.restassert.assertionerror;
+package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.exception;
 
 import junit.framework.ComparisonFailure;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
-public class RestAssertionError extends ComparisonFailure {
+public class ActionAssertionError extends ComparisonFailure {
 
     private static final int FACTORY_METHOD_STACK_TRACE_LEVELS_TO_REMOVE = 2;
 
@@ -16,12 +13,12 @@ public class RestAssertionError extends ComparisonFailure {
 
     private int stackTraceLevelsToRemove;
 
-    private RestAssertionError(String message, String expected, String actual, int stackTraceLevelsToRemove) {
+    private ActionAssertionError(String message, String expected, String actual, int stackTraceLevelsToRemove) {
         super(message, expected, actual);
         this.stackTraceLevelsToRemove = stackTraceLevelsToRemove;
     }
 
-    private RestAssertionError(String message, ComparisonFailure cause, int stackTraceLevelsToRemove) {
+    private ActionAssertionError(String message, ComparisonFailure cause, int stackTraceLevelsToRemove) {
         this(
                 message,
                 extractExecuteParam(cause.getExpected()),
@@ -55,44 +52,29 @@ public class RestAssertionError extends ComparisonFailure {
         super.printStackTrace(s);
     }
 
-    public static RestAssertionError wrongActionParams(ComparisonFailure error) {
-        return new RestAssertionError(
+    public static ActionAssertionError wrongActionParams(ComparisonFailure error) {
+        return wrongActionParams(error, FACTORY_METHOD_STACK_TRACE_LEVELS_TO_REMOVE);
+    }
+
+    public static ActionAssertionError wrongActionParams(ComparisonFailure error, int stackTraceLevelsToRemove) {
+        return new ActionAssertionError(
                 "Action is executed using wrong params.",
                 error,
-                FACTORY_METHOD_STACK_TRACE_LEVELS_TO_REMOVE
+                ++stackTraceLevelsToRemove
         );
     }
 
-    public static RestAssertionError missingActionInitialization() {
-        return new RestAssertionError(
-                "Action was not initialized.",
-                "<action was initialized>",
-                "<action was not initialized>",
-                FACTORY_METHOD_STACK_TRACE_LEVELS_TO_REMOVE
-        );
+    public static ActionAssertionError missingActionExecution() {
+        return missingActionExecution(FACTORY_METHOD_STACK_TRACE_LEVELS_TO_REMOVE);
     }
 
-    public static RestAssertionError missingActionExecution() {
-        return new RestAssertionError(
+    public static ActionAssertionError missingActionExecution(int stackTraceLevelsToRemove) {
+        return new ActionAssertionError(
                 "Action was not executed.",
                 "<action was executed>",
                 "<action was not executed>",
-                FACTORY_METHOD_STACK_TRACE_LEVELS_TO_REMOVE
+                ++stackTraceLevelsToRemove
         );
-    }
-
-    public static RestAssertionError missingActionParam(Class<?> actionClass, String paramName, Object expected) {
-        return new RestAssertionError(
-                String.format("Action parameter '%s' was not specified.", extractMethod(actionClass, paramName)),
-                String.valueOf(expected),
-                "<undefined>",
-                FACTORY_METHOD_STACK_TRACE_LEVELS_TO_REMOVE
-        );
-    }
-
-    private static String extractMethod(Class<?> clazz, String methodName) {
-        assert Arrays.stream(clazz.getMethods()).anyMatch(method -> methodName.equals(method.getName()));
-        return String.format("%s.%s", clazz.getName(), methodName);
     }
 
     private static String extractExecuteParam(String error) {

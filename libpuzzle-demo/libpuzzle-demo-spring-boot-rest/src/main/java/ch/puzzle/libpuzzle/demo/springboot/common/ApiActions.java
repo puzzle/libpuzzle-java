@@ -8,6 +8,6 @@ public class ApiActions<TEntity> extends RestActions<
         FindAction<TEntity, Long>,
         CreateAction<TEntity>,
         UpdateAction<TEntity, Long>,
-        DeleteAction<TEntity, Long>
+        DeleteAction<Long>
         > {
 }

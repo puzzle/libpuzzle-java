@@ -7,17 +7,17 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.function.Supplier;
 
-public class DeleteAction<TEntity, TEntityId> {
+public class DeleteAction<TEntityId> {
 
-    private CrudRepository<TEntity, TEntityId> repository;
+    private CrudRepository<?, TEntityId> repository;
 
     private Supplier<TEntityId> idSupplier = IllegalActionParam.missingParam(DeleteAction.class, "by");
 
-    public DeleteAction(CrudRepository<TEntity, TEntityId> repository) {
+    public DeleteAction(CrudRepository<?, TEntityId> repository) {
         this.repository = repository;
     }
 
-    public DeleteAction<TEntity, TEntityId> by(TEntityId id) {
+    public DeleteAction<TEntityId> by(TEntityId id) {
         idSupplier = () -> id;
         return this;
     }

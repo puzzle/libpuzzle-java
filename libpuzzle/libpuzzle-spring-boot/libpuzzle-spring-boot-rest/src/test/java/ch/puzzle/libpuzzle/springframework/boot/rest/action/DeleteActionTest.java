@@ -21,7 +21,7 @@ public class DeleteActionTest {
 
     private static final String NOT_EXISTING_ENTITY_ID = "another-id";
 
-    private DeleteAction<Object, String> action;
+    private DeleteAction<String> action;
 
     @Mock
     private CrudRepository<Object, String> repository;

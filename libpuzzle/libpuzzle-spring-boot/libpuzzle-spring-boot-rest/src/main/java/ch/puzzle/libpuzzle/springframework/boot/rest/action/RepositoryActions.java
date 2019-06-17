@@ -23,7 +23,7 @@ public class RepositoryActions {
             FindAction<TEntity, TEntityId>,
             CreateAction<TEntity>,
             UpdateAction<TEntity, TEntityId>,
-            DeleteAction<TEntity, TEntityId>
+            DeleteAction<TEntityId>
             > {
 
         private CrudRepository<TEntity, TEntityId> repository;
@@ -41,7 +41,7 @@ public class RepositoryActions {
                 FindAction<TEntity, TEntityId>,
                 CreateAction<TEntity>,
                 UpdateAction<TEntity, TEntityId>,
-                DeleteAction<TEntity, TEntityId>
+                DeleteAction<TEntityId>
                 >.Config config) {
             config
                     .useListAction(() -> new ListAction<>(repository, dtoMapper))
