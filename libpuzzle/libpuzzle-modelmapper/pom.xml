@@ -8,8 +8,10 @@
         <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>libpuzzle-modelmapper</artifactId>
+    <properties>
+        <main.basedir>${basedir}/..</main.basedir>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.modelmapper</groupId>
@@ -23,6 +25,4 @@
             <version>8.0</version>
         </dependency>
     </dependencies>
-
-
 </project>

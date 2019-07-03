@@ -7,7 +7,6 @@
         <artifactId>libpuzzle-parent</artifactId>
         <groupId>ch.puzzle</groupId>
         <version>${revision}</version>
-        <relativePath>..</relativePath>
     </parent>
     <artifactId>libpuzzle-demo</artifactId>
     <name>libpuzzle Demo</name>

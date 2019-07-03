@@ -7,7 +7,6 @@
         <artifactId>libpuzzle-parent</artifactId>
         <groupId>ch.puzzle</groupId>
         <version>${revision}</version>
-        <relativePath>..</relativePath>
     </parent>
     <artifactId>libpuzzle</artifactId>
     <packaging>pom</packaging>
@@ -16,6 +15,10 @@
         <module>libpuzzle-spring-boot</module>
         <module>libpuzzle-modelmapper</module>
     </modules>
+
+    <properties>
+        <main.basedir>${basedir}/..</main.basedir>
+    </properties>
 
     <dependencies>
         <dependency>

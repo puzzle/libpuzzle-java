@@ -11,4 +11,4 @@ stages:
   - compile
   - test
   - name: publish
-    if: branch = master
+    if: branch = master OR tag IS present

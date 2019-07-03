@@ -9,7 +9,8 @@
     <packaging>pom</packaging>
     <version>${revision}</version>
     <properties>
-        <revision>1.0-SNAPSHOT</revision>
+        <revision>0.1.0-SNAPSHOT</revision>
+
         <main.basedir>${basedir}</main.basedir>
 
         <!-- Testing versions -->

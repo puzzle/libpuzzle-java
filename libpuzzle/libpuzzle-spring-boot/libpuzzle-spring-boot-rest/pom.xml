@@ -7,7 +7,6 @@
         <groupId>ch.puzzle</groupId>
         <artifactId>libpuzzle-spring-boot</artifactId>
         <version>${revision}</version>
-        <relativePath>..</relativePath>
     </parent>
     <artifactId>libpuzzle-spring-boot-rest</artifactId>
     <name>libpuzzle Spring Boot REST</name>
