@@ -1,6 +1,6 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action;
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.RestActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.CrudActions;
 import ch.puzzle.libpuzzle.springframework.boot.rest.mapper.DtoMapper;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
@@ -18,13 +18,13 @@ public class RepositoryActions {
         return new Configurer<>(repository, dtoMapper);
     }
 
-    private static class Configurer<TEntity, TEntityId> implements RestActionsConfiguration<
-            ListAction<TEntity>,
-            FindAction<TEntity, TEntityId>,
-            CreateAction<TEntity>,
-            UpdateAction<TEntity, TEntityId>,
-            DeleteAction<TEntityId>
-            > {
+    private static class Configurer<TEntity, TEntityId> implements CrudActionsConfiguration<
+                ListAction<TEntity>,
+                FindAction<TEntity, TEntityId>,
+                CreateAction<TEntity>,
+                UpdateAction<TEntity, TEntityId>,
+                DeleteAction<TEntityId>
+                > {
 
         private CrudRepository<TEntity, TEntityId> repository;
 
@@ -36,13 +36,13 @@ public class RepositoryActions {
         }
 
         @Override
-        public void apply(RestActions<
-                ListAction<TEntity>,
-                FindAction<TEntity, TEntityId>,
-                CreateAction<TEntity>,
-                UpdateAction<TEntity, TEntityId>,
-                DeleteAction<TEntityId>
-                >.Config config) {
+        public void apply(CrudActions<
+                        ListAction<TEntity>,
+                        FindAction<TEntity, TEntityId>,
+                        CreateAction<TEntity>,
+                        UpdateAction<TEntity, TEntityId>,
+                        DeleteAction<TEntityId>
+                        >.Config config) {
             config
                     .useListAction(() -> new ListAction<>(repository, dtoMapper))
                     .useFindAction(() -> new FindAction<>(repository, dtoMapper))

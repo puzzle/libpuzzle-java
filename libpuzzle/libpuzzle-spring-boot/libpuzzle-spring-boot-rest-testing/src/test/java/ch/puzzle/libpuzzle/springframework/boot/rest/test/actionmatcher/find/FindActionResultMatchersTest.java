@@ -1,7 +1,7 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.find;
 
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.RestActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.CrudActions;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.FindAction;
 import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.exception.ActionAssertionError;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.doReturn;
 public class FindActionResultMatchersTest {
 
     @Mock
-    private RestActions<?, FindAction<Object, Object>, ?, ?, ?> restActions;
+    private CrudActions<?, FindAction<Object, Object>, ?, ?, ?> crudActions;
 
     @Mock
     private MvcResult mvcResult;
@@ -37,7 +37,7 @@ public class FindActionResultMatchersTest {
     public void setup() {
         final var request = new MockHttpServletRequest();
         doReturn(request).when(mvcResult).getRequest();
-        mockedFindAction(restActions).beforeMockMvcCreated(null, null).postProcessRequest(request);
+        mockedFindAction(crudActions).beforeMockMvcCreated(null, null).postProcessRequest(request);
     }
 
     @Nested
@@ -45,7 +45,7 @@ public class FindActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.find();
+            crudActions.find();
             assertThrows(ActionAssertionError.class, () ->
                     FindActionMatchers.findAction().by(0).match(mvcResult)
             );
@@ -56,7 +56,7 @@ public class FindActionResultMatchersTest {
 
         @Test
         public void tesDifferentInvocation() {
-            restActions.find().by(1);
+            crudActions.find().by(1);
             assertThrows(ActionAssertionError.class, () ->
                     FindActionMatchers.findAction().by(2).match(mvcResult)
             );
@@ -67,7 +67,7 @@ public class FindActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.find().by(1);
+            crudActions.find().by(1);
             FindActionMatchers.findAction().by(1).match(mvcResult);
             FindActionMatchers.findAction().by(equalTo(1)).match(mvcResult);
         }
@@ -78,7 +78,7 @@ public class FindActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.find();
+            crudActions.find();
             assertThrows(ActionAssertionError.class, () ->
                     FindActionMatchers.findAction().executed().match(mvcResult)
             );
@@ -87,7 +87,7 @@ public class FindActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.find().execute(Object.class);
+            crudActions.find().execute(Object.class);
             FindActionMatchers.findAction().executed().match(mvcResult);
         }
     }
@@ -97,7 +97,7 @@ public class FindActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.find();
+            crudActions.find();
             assertThrows(ActionAssertionError.class, () ->
                     FindActionMatchers.findAction().executed(Object.class).match(mvcResult)
             );
@@ -108,7 +108,7 @@ public class FindActionResultMatchersTest {
 
         @Test
         public void testDifferentInvocation() {
-            restActions.find().execute(String.class);
+            crudActions.find().execute(String.class);
             assertThrows(ActionAssertionError.class, () ->
                     FindActionMatchers.findAction().executed(Object.class).match(mvcResult)
             );
@@ -119,7 +119,7 @@ public class FindActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.find().execute(Object.class);
+            crudActions.find().execute(Object.class);
             FindActionMatchers.findAction().executed(Object.class).match(mvcResult);
             FindActionMatchers.findAction().executed(equalTo(Object.class)).match(mvcResult);
         }

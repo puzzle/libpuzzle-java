@@ -14,7 +14,7 @@ public class UpdateAction<TEntity, TEntityId> {
 
     private DtoMapper mapper;
 
-    private Supplier<Object> dtoSupplier = IllegalActionParam.missingParam(UpdateAction.class, "dto");
+    private Supplier<Object> dtoSupplier = IllegalActionParam.missingParam(UpdateAction.class, "with");
 
     private Supplier<TEntityId> idSupplier = IllegalActionParam.missingParam(UpdateAction.class, "by");
 
@@ -31,7 +31,7 @@ public class UpdateAction<TEntity, TEntityId> {
         return this;
     }
 
-    public <TDto> UpdateAction<TEntity, TEntityId> dto(TDto requestDto) {
+    public <TDto> UpdateAction<TEntity, TEntityId> with(TDto requestDto) {
         this.dtoSupplier = () -> requestDto;
         return this;
     }

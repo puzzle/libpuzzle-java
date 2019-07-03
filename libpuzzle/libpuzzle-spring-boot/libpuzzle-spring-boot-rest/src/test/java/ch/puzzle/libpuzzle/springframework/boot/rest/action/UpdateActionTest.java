@@ -51,7 +51,7 @@ public class UpdateActionTest {
 
     @Test
     public void testExistingEntity() {
-        var response = action.by(EXISTING_ENTITY_ID).dto(requestDto).execute(Object.class);
+        var response = action.by(EXISTING_ENTITY_ID).with(requestDto).execute(Object.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertSame(responseDto, response.getBody());
         verify(repository).findById(any());
@@ -62,7 +62,7 @@ public class UpdateActionTest {
 
     @Test
     public void testEntityNotFound() {
-        var response = action.by(NOT_EXISTING_ENTITY_ID).dto(requestDto).execute(Object.class);
+        var response = action.by(NOT_EXISTING_ENTITY_ID).with(requestDto).execute(Object.class);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
         verify(repository).findById(any());
@@ -78,6 +78,6 @@ public class UpdateActionTest {
 
     @Test(expected = IllegalActionParam.class)
     public void testMissingInitialEntity() {
-        action.dto(requestDto).execute(Object.class);
+        action.with(requestDto).execute(Object.class);
     }
 }

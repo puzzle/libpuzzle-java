@@ -48,7 +48,7 @@ public class CreateActionTest {
 
     @Test
     public void testCreateEntity() {
-        var response = action.from(requestDto).with(initialEntity).execute(Object.class);
+        var response = action.with(requestDto).using(initialEntity).execute(Object.class);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertSame(responseDto, response.getBody());
         verify(repository).save(same(initialEntity));
@@ -58,12 +58,12 @@ public class CreateActionTest {
 
     @Test(expected = IllegalActionParam.class)
     public void testMissingDto() {
-        action.with(initialEntity).execute(Object.class);
+        action.using(initialEntity).execute(Object.class);
     }
 
     @Test(expected = IllegalActionParam.class)
     public void testMissingInitialEntity() {
-        action.from(requestDto).execute(Object.class);
+        action.with(requestDto).execute(Object.class);
     }
 
 }

@@ -1,42 +1,41 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.create;
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.RestActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.CrudActions;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.CreateAction;
-import ch.puzzle.libpuzzle.springframework.boot.rest.action.UpdateAction;
-import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.RestActionConfigurer;
+import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.CrudActionConfigurer;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
-public class CreateActionConfigurer<TEntity> extends RestActionConfigurer<RestActions<?, ?, CreateAction<TEntity>, ?, ?>, CreateAction<TEntity>> {
+public class CreateActionConfigurer<TEntity> extends CrudActionConfigurer<CrudActions<?, ?, CreateAction<TEntity>, ?, ?>, CreateAction<TEntity>> {
 
-    private CreateActionConfigurer(RestActions<?, ?, CreateAction<TEntity>, ?, ?> restActions) {
-        super(restActions);
+    private CreateActionConfigurer(CrudActions<?, ?, CreateAction<TEntity>, ?, ?> crudActions) {
+        super(crudActions);
     }
 
-    public static <TEntity> CreateActionConfigurer<TEntity> mockedCreateAction(RestActions<?, ?, CreateAction<TEntity>, ?, ?> restActions) {
-        return new CreateActionConfigurer<>(restActions);
+    public static <TEntity> CreateActionConfigurer<TEntity> mockedCreateAction(CrudActions<?, ?, CreateAction<TEntity>, ?, ?> crudActions) {
+        return new CreateActionConfigurer<>(crudActions);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected CreateAction<TEntity> createActionMock() {
         var action = (CreateAction<TEntity>) mock(CreateAction.class);
+        doReturn(action).when(action).using(any());
         doReturn(action).when(action).with(any());
-        doReturn(action).when(action).from(any());
         doReturn(null).when(action).execute(any());
         return action;
     }
 
     @Override
     protected CreateAction<TEntity> createActionSpy() {
-        return spy(restActions.create());
+        return spy(crudActions.create());
     }
 
     @Override
-    protected void mockRestActions(RestActions<?, ?, CreateAction<TEntity>, ?, ?> restActions, CreateAction<TEntity> action) {
-        doReturn(action).when(restActions).create();
+    protected void mockCrudActions(CrudActions<?, ?, CreateAction<TEntity>, ?, ?> crudActions, CreateAction<TEntity> action) {
+        doReturn(action).when(crudActions).create();
     }
 }

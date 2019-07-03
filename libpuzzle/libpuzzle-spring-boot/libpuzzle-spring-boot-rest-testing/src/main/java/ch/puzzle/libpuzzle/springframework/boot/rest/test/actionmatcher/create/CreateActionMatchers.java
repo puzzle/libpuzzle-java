@@ -33,20 +33,20 @@ public class CreateActionMatchers<TEntity> implements ActionMatchers<CreateActio
         return result -> verify(result.action(this)).execute(argThat(matcher));
     }
 
-    public ActionResultMatcher with(TEntity id) {
-        return with(equalTo(id));
+    public ActionResultMatcher using(TEntity id) {
+        return using(equalTo(id));
     }
 
-    public ActionResultMatcher with(Matcher<TEntity> matcher) {
+    public ActionResultMatcher using(Matcher<TEntity> matcher) {
+        return result -> verify(result.action(this)).using(argThat(matcher));
+    }
+
+    public <TDto> ActionResultMatcher with(TDto dto) {
+        return with(equalTo(dto));
+    }
+
+    public <TDto> ActionResultMatcher with(Matcher<TDto> matcher) {
         return result -> verify(result.action(this)).with(argThat(matcher));
-    }
-
-    public <TDto> ActionResultMatcher from(TDto dto) {
-        return from(equalTo(dto));
-    }
-
-    public <TDto> ActionResultMatcher from(Matcher<TDto> matcher) {
-        return result -> verify(result.action(this)).from(argThat(matcher));
     }
 
 }

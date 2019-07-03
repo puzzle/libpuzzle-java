@@ -1,7 +1,7 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.list;
 
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.RestActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.CrudActions;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.ListAction;
 import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.exception.ActionAssertionError;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.list.ListActionConfigurer.mockedListAction;
-import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.list.ListActionMatchers.listAction;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
@@ -29,7 +28,7 @@ import static org.mockito.Mockito.doReturn;
 public class ListActionResultMatchersTest {
 
     @Mock
-    private RestActions<ListAction<Object>, ?, ?, ?, ?> restActions;
+    private CrudActions<ListAction<Object>, ?, ?, ?, ?> crudActions;
 
     @Mock
     private MvcResult mvcResult;
@@ -38,7 +37,7 @@ public class ListActionResultMatchersTest {
     public void setup() {
         final var request = new MockHttpServletRequest();
         doReturn(request).when(mvcResult).getRequest();
-        mockedListAction(restActions).beforeMockMvcCreated(null, null).postProcessRequest(request);
+        mockedListAction(crudActions).beforeMockMvcCreated(null, null).postProcessRequest(request);
     }
 
     @Nested
@@ -46,7 +45,7 @@ public class ListActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.list();
+            crudActions.list();
             assertThrows(ActionAssertionError.class, () ->
                     ListActionMatchers.listAction().executed().match(mvcResult)
             );
@@ -55,7 +54,7 @@ public class ListActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.list().execute(Object.class);
+            crudActions.list().execute(Object.class);
             ListActionMatchers.listAction().executed().match(mvcResult);
         }
     }
@@ -65,7 +64,7 @@ public class ListActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.list();
+            crudActions.list();
             assertThrows(ActionAssertionError.class, () ->
                     ListActionMatchers.listAction().executed(Object.class).match(mvcResult)
             );
@@ -76,7 +75,7 @@ public class ListActionResultMatchersTest {
 
         @Test
         public void testDifferentInvocation() {
-            restActions.list().execute(String.class);
+            crudActions.list().execute(String.class);
             assertThrows(ActionAssertionError.class, () ->
                     ListActionMatchers.listAction().executed(Object.class).match(mvcResult)
             );
@@ -87,7 +86,7 @@ public class ListActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.list().execute(Object.class);
+            crudActions.list().execute(Object.class);
             ListActionMatchers.listAction().executed(Object.class).match(mvcResult);
             ListActionMatchers.listAction().executed(equalTo(Object.class)).match(mvcResult);
         }

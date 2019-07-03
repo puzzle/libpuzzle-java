@@ -1,7 +1,7 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.update;
 
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.RestActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.CrudActions;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.UpdateAction;
 import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.exception.ActionAssertionError;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.doReturn;
 public class UpdateActionResultMatchersTest {
 
     @Mock
-    private RestActions<?, ?, ?, UpdateAction<Object, Object>, ?> restActions;
+    private CrudActions<?, ?, ?, UpdateAction<Object, Object>, ?> crudActions;
 
     @Mock
     private MvcResult mvcResult;
@@ -38,7 +38,7 @@ public class UpdateActionResultMatchersTest {
     public void setup() {
         final var request = new MockHttpServletRequest();
         doReturn(request).when(mvcResult).getRequest();
-        mockedUpdateAction(restActions).beforeMockMvcCreated(null, null).postProcessRequest(request);
+        mockedUpdateAction(crudActions).beforeMockMvcCreated(null, null).postProcessRequest(request);
     }
 
     @Nested
@@ -46,7 +46,7 @@ public class UpdateActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.update();
+            crudActions.update();
             assertThrows(ActionAssertionError.class, () ->
                     UpdateActionMatchers.updateAction().by(0).match(mvcResult)
             );
@@ -57,7 +57,7 @@ public class UpdateActionResultMatchersTest {
 
         @Test
         public void tesDifferentInvocation() {
-            restActions.update().by(1);
+            crudActions.update().by(1);
             assertThrows(ActionAssertionError.class, () ->
                     UpdateActionMatchers.updateAction().by(2).match(mvcResult)
             );
@@ -68,7 +68,7 @@ public class UpdateActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.update().by(1);
+            crudActions.update().by(1);
             UpdateActionMatchers.updateAction().by(1).match(mvcResult);
             UpdateActionMatchers.updateAction().by(equalTo(1)).match(mvcResult);
         }
@@ -79,7 +79,7 @@ public class UpdateActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.update();
+            crudActions.update();
             assertThrows(ActionAssertionError.class, () ->
                     UpdateActionMatchers.updateAction().dto(Object.class).match(mvcResult)
             );
@@ -90,7 +90,7 @@ public class UpdateActionResultMatchersTest {
 
         @Test
         public void tesDifferentInvocation() {
-            restActions.update().dto(String.class);
+            crudActions.update().with(String.class);
             assertThrows(ActionAssertionError.class, () ->
                     UpdateActionMatchers.updateAction().dto(Object.class).match(mvcResult)
             );
@@ -101,7 +101,7 @@ public class UpdateActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.update().dto(Object.class);
+            crudActions.update().with(Object.class);
             UpdateActionMatchers.updateAction().dto(Object.class).match(mvcResult);
             UpdateActionMatchers.updateAction().dto(equalTo(Object.class)).match(mvcResult);
         }
@@ -112,7 +112,7 @@ public class UpdateActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.update();
+            crudActions.update();
             assertThrows(ActionAssertionError.class, () ->
                     UpdateActionMatchers.updateAction().executed().match(mvcResult)
             );
@@ -121,7 +121,7 @@ public class UpdateActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.update().execute(Object.class);
+            crudActions.update().execute(Object.class);
             UpdateActionMatchers.updateAction().executed().match(mvcResult);
         }
     }
@@ -131,7 +131,7 @@ public class UpdateActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.update();
+            crudActions.update();
             assertThrows(ActionAssertionError.class, () ->
                     UpdateActionMatchers.updateAction().executed(Object.class).match(mvcResult)
             );
@@ -142,7 +142,7 @@ public class UpdateActionResultMatchersTest {
 
         @Test
         public void testDifferentInvocation() {
-            restActions.update().execute(String.class);
+            crudActions.update().execute(String.class);
             assertThrows(ActionAssertionError.class, () ->
                     UpdateActionMatchers.updateAction().executed(Object.class).match(mvcResult)
             );
@@ -153,7 +153,7 @@ public class UpdateActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.update().execute(Object.class);
+            crudActions.update().execute(Object.class);
             UpdateActionMatchers.updateAction().executed(Object.class).match(mvcResult);
             UpdateActionMatchers.updateAction().executed(equalTo(Object.class)).match(mvcResult);
         }

@@ -46,7 +46,7 @@ public class UpdateActionMatchers<TEntity, TId> implements ActionMatchers<Update
     }
 
     public <TDto> ActionResultMatcher dto(Matcher<TDto> matcher) {
-        return result -> verify(result.action(this)).dto(argThat(matcher));
+        return result -> verify(result.action(this)).with(argThat(matcher));
     }
 
 }

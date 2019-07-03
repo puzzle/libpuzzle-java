@@ -1,22 +1,22 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.find;
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.RestActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.CrudActions;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.FindAction;
-import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.RestActionConfigurer;
+import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.CrudActionConfigurer;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
-public class FindActionConfigurer<TEntity, TId> extends RestActionConfigurer<RestActions<?, FindAction<TEntity, TId>, ?, ?, ?>, FindAction<TEntity, TId>> {
+public class FindActionConfigurer<TEntity, TId> extends CrudActionConfigurer<CrudActions<?, FindAction<TEntity, TId>, ?, ?, ?>, FindAction<TEntity, TId>> {
 
-    private FindActionConfigurer(RestActions<?, FindAction<TEntity, TId>, ?, ?, ?> restActions) {
-        super(restActions);
+    private FindActionConfigurer(CrudActions<?, FindAction<TEntity, TId>, ?, ?, ?> crudActions) {
+        super(crudActions);
     }
 
-    public static <TEntity, TId> FindActionConfigurer<TEntity, TId> mockedFindAction(RestActions<?, FindAction<TEntity, TId>, ?, ?, ?> restActions) {
-        return new FindActionConfigurer<>(restActions);
+    public static <TEntity, TId> FindActionConfigurer<TEntity, TId> mockedFindAction(CrudActions<?, FindAction<TEntity, TId>, ?, ?, ?> crudActions) {
+        return new FindActionConfigurer<>(crudActions);
     }
 
     @Override
@@ -30,11 +30,11 @@ public class FindActionConfigurer<TEntity, TId> extends RestActionConfigurer<Res
 
     @Override
     protected FindAction<TEntity, TId> createActionSpy() {
-        return spy(restActions.find());
+        return spy(crudActions.find());
     }
 
     @Override
-    protected void mockRestActions(RestActions<?, FindAction<TEntity, TId>, ?, ?, ?> restActions, FindAction<TEntity, TId> action) {
-        doReturn(action).when(restActions).find();
+    protected void mockCrudActions(CrudActions<?, FindAction<TEntity, TId>, ?, ?, ?> crudActions, FindAction<TEntity, TId> action) {
+        doReturn(action).when(crudActions).find();
     }
 }

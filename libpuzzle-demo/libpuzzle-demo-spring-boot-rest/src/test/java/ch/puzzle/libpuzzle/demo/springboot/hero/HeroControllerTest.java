@@ -88,8 +88,8 @@ public class HeroControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(NEW_HERO_DTO_JSON))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(createAction().with(new Hero()))
-                .andExpect(createAction().from(NEW_HERO_DTO))
+                .andExpect(createAction().using(new Hero()))
+                .andExpect(createAction().with(NEW_HERO_DTO))
                 .andExpect(createAction().executed(HeroDto.class));
     }
 

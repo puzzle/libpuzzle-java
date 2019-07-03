@@ -1,22 +1,22 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.list;
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.RestActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.CrudActions;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.ListAction;
-import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.RestActionConfigurer;
+import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.CrudActionConfigurer;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
-public class ListActionConfigurer<TEntity> extends RestActionConfigurer<RestActions<ListAction<TEntity>, ?, ?, ?, ?>, ListAction<TEntity>> {
+public class ListActionConfigurer<TEntity> extends CrudActionConfigurer<CrudActions<ListAction<TEntity>, ?, ?, ?, ?>, ListAction<TEntity>> {
 
-    private ListActionConfigurer(RestActions<ListAction<TEntity>, ?, ?, ?, ?> restActions) {
-        super(restActions);
+    private ListActionConfigurer(CrudActions<ListAction<TEntity>, ?, ?, ?, ?> crudActions) {
+        super(crudActions);
     }
 
-    public static <TEntity> ListActionConfigurer<TEntity> mockedListAction(RestActions<ListAction<TEntity>, ?, ?, ?, ?> restActions) {
-        return new ListActionConfigurer<>(restActions);
+    public static <TEntity> ListActionConfigurer<TEntity> mockedListAction(CrudActions<ListAction<TEntity>, ?, ?, ?, ?> crudActions) {
+        return new ListActionConfigurer<>(crudActions);
     }
 
     @Override
@@ -29,11 +29,11 @@ public class ListActionConfigurer<TEntity> extends RestActionConfigurer<RestActi
 
     @Override
     protected ListAction<TEntity> createActionSpy() {
-        return spy(restActions.list());
+        return spy(crudActions.list());
     }
 
     @Override
-    protected void mockRestActions(RestActions<ListAction<TEntity>, ?, ?, ?, ?> restActions, ListAction<TEntity> action) {
-        doReturn(action).when(restActions).list();
+    protected void mockCrudActions(CrudActions<ListAction<TEntity>, ?, ?, ?, ?> crudActions, ListAction<TEntity> action) {
+        doReturn(action).when(crudActions).list();
     }
 }

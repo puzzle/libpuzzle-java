@@ -1,7 +1,7 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.delete;
 
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.RestActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.CrudActions;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.DeleteAction;
 import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.exception.ActionAssertionError;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.doReturn;
 public class DeleteActionResultMatchersTest {
 
     @Mock
-    private RestActions<?, ?, ?, ?, DeleteAction<Object>> restActions;
+    private CrudActions<?, ?, ?, ?, DeleteAction<Object>> crudActions;
 
     @Mock
     private MvcResult mvcResult;
@@ -37,7 +37,7 @@ public class DeleteActionResultMatchersTest {
     public void setup() {
         final var request = new MockHttpServletRequest();
         doReturn(request).when(mvcResult).getRequest();
-        mockedDeleteAction(restActions).beforeMockMvcCreated(null, null).postProcessRequest(request);
+        mockedDeleteAction(crudActions).beforeMockMvcCreated(null, null).postProcessRequest(request);
     }
 
     @Nested
@@ -45,7 +45,7 @@ public class DeleteActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.delete();
+            crudActions.delete();
             assertThrows(ActionAssertionError.class, () ->
                     DeleteActionMatchers.deleteAction().by(0).match(mvcResult)
             );
@@ -56,7 +56,7 @@ public class DeleteActionResultMatchersTest {
 
         @Test
         public void tesDifferentInvocation() {
-            restActions.delete().by(1);
+            crudActions.delete().by(1);
             assertThrows(ActionAssertionError.class, () ->
                     DeleteActionMatchers.deleteAction().by(2).match(mvcResult)
             );
@@ -67,7 +67,7 @@ public class DeleteActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.delete().by(1);
+            crudActions.delete().by(1);
             DeleteActionMatchers.deleteAction().by(1).match(mvcResult);
             DeleteActionMatchers.deleteAction().by(equalTo(1)).match(mvcResult);
         }
@@ -78,7 +78,7 @@ public class DeleteActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.delete();
+            crudActions.delete();
             assertThrows(ActionAssertionError.class, () ->
                     DeleteActionMatchers.deleteAction().executed().match(mvcResult)
             );
@@ -87,7 +87,7 @@ public class DeleteActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.delete().execute();
+            crudActions.delete().execute();
             DeleteActionMatchers.deleteAction().executed().match(mvcResult);
         }
     }

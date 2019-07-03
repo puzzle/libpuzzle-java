@@ -2,13 +2,13 @@ package ch.puzzle.libpuzzle.springframework.boot.rest;
 
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.ActionFactory;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.Action;
-import ch.puzzle.libpuzzle.springframework.boot.rest.action.RestActionsConfiguration;
+import ch.puzzle.libpuzzle.springframework.boot.rest.action.CrudActionsConfiguration;
 
-public class RestActions<TListAction, TFindAction, TCreateAction, TUpdateAction, TDeleteAction> {
+public class CrudActions<TListAction, TFindAction, TCreateAction, TUpdateAction, TDeleteAction> {
 
     private Config config;
 
-    public RestActions() {
+    public CrudActions() {
         config = new Config();
     }
 
@@ -44,7 +44,7 @@ public class RestActions<TListAction, TFindAction, TCreateAction, TUpdateAction,
         private ActionFactory<TDeleteAction> deleteActionFactory = Action::unsupported;
         private ActionFactory<TListAction> listActionFactory = Action::unsupported;
 
-        public Config use(RestActionsConfiguration<TListAction, TFindAction, TCreateAction, TUpdateAction, TDeleteAction> config) {
+        public Config use(CrudActionsConfiguration<TListAction, TFindAction, TCreateAction, TUpdateAction, TDeleteAction> config) {
             config.apply(this);
             return this;
         }

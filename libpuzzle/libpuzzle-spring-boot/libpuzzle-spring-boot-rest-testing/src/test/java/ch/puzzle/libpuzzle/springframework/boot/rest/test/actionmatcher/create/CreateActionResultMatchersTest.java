@@ -1,7 +1,7 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.create;
 
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.RestActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.CrudActions;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.CreateAction;
 import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.exception.ActionAssertionError;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.doReturn;
 public class CreateActionResultMatchersTest {
 
     @Mock
-    private RestActions<?, ?, CreateAction<Object>, ?, ?> restActions;
+    private CrudActions<?, ?, CreateAction<Object>, ?, ?> crudActions;
 
     @Mock
     private MvcResult mvcResult;
@@ -38,7 +38,7 @@ public class CreateActionResultMatchersTest {
     public void setup() {
         final var request = new MockHttpServletRequest();
         doReturn(request).when(mvcResult).getRequest();
-        mockedCreateAction(restActions).beforeMockMvcCreated(null, null).postProcessRequest(request);
+        mockedCreateAction(crudActions).beforeMockMvcCreated(null, null).postProcessRequest(request);
     }
 
     @Nested
@@ -46,32 +46,32 @@ public class CreateActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.create();
+            crudActions.create();
             assertThrows(ActionAssertionError.class, () ->
-                    CreateActionMatchers.createAction().with(new Object()).match(mvcResult)
+                    CreateActionMatchers.createAction().using(new Object()).match(mvcResult)
             );
             assertThrows(ActionAssertionError.class, () ->
-                    CreateActionMatchers.createAction().with(equalTo(new Object())).match(mvcResult)
+                    CreateActionMatchers.createAction().using(equalTo(new Object())).match(mvcResult)
             );
         }
 
         @Test
         public void tesDifferentInvocation() {
-            restActions.create().with("");
+            crudActions.create().using("");
             assertThrows(ActionAssertionError.class, () ->
-                    CreateActionMatchers.createAction().with(new Object()).match(mvcResult)
+                    CreateActionMatchers.createAction().using(new Object()).match(mvcResult)
             );
             assertThrows(ActionAssertionError.class, () ->
-                    CreateActionMatchers.createAction().with(equalTo(new Object())).match(mvcResult)
+                    CreateActionMatchers.createAction().using(equalTo(new Object())).match(mvcResult)
             );
         }
 
         @Test
         public void testCorrectInvocation() throws Exception {
             var object = new Object();
-            restActions.create().with(object);
-            CreateActionMatchers.createAction().with(object).match(mvcResult);
-            CreateActionMatchers.createAction().with(equalTo(object)).match(mvcResult);
+            crudActions.create().using(object);
+            CreateActionMatchers.createAction().using(object).match(mvcResult);
+            CreateActionMatchers.createAction().using(equalTo(object)).match(mvcResult);
         }
     }
 
@@ -80,31 +80,31 @@ public class CreateActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.create();
+            crudActions.create();
             assertThrows(ActionAssertionError.class, () ->
-                    CreateActionMatchers.createAction().from(Object.class).match(mvcResult)
+                    CreateActionMatchers.createAction().with(Object.class).match(mvcResult)
             );
             assertThrows(ActionAssertionError.class, () ->
-                    CreateActionMatchers.createAction().from(equalTo(Object.class)).match(mvcResult)
+                    CreateActionMatchers.createAction().with(equalTo(Object.class)).match(mvcResult)
             );
         }
 
         @Test
         public void tesDifferentInvocation() {
-            restActions.create().from(String.class);
+            crudActions.create().with(String.class);
             assertThrows(ActionAssertionError.class, () ->
-                    CreateActionMatchers.createAction().from(Object.class).match(mvcResult)
+                    CreateActionMatchers.createAction().with(Object.class).match(mvcResult)
             );
             assertThrows(ActionAssertionError.class, () ->
-                    CreateActionMatchers.createAction().from(equalTo(Object.class)).match(mvcResult)
+                    CreateActionMatchers.createAction().with(equalTo(Object.class)).match(mvcResult)
             );
         }
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.create().from(Object.class);
-            CreateActionMatchers.createAction().from(Object.class).match(mvcResult);
-            CreateActionMatchers.createAction().from(equalTo(Object.class)).match(mvcResult);
+            crudActions.create().with(Object.class);
+            CreateActionMatchers.createAction().with(Object.class).match(mvcResult);
+            CreateActionMatchers.createAction().with(equalTo(Object.class)).match(mvcResult);
         }
     }
 
@@ -113,7 +113,7 @@ public class CreateActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.create();
+            crudActions.create();
             assertThrows(ActionAssertionError.class, () ->
                     CreateActionMatchers.createAction().executed().match(mvcResult)
             );
@@ -122,7 +122,7 @@ public class CreateActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.create().execute(Object.class);
+            crudActions.create().execute(Object.class);
             CreateActionMatchers.createAction().executed().match(mvcResult);
         }
     }
@@ -132,7 +132,7 @@ public class CreateActionResultMatchersTest {
 
         @Test
         public void testNoInvocation() {
-            restActions.create();
+            crudActions.create();
             assertThrows(ActionAssertionError.class, () ->
                     CreateActionMatchers.createAction().executed(Object.class).match(mvcResult)
             );
@@ -143,7 +143,7 @@ public class CreateActionResultMatchersTest {
 
         @Test
         public void testDifferentInvocation() {
-            restActions.create().execute(String.class);
+            crudActions.create().execute(String.class);
             assertThrows(ActionAssertionError.class, () ->
                     CreateActionMatchers.createAction().executed(Object.class).match(mvcResult)
             );
@@ -154,7 +154,7 @@ public class CreateActionResultMatchersTest {
 
         @Test
         public void testCorrectInvocation() throws Exception {
-            restActions.create().execute(Object.class);
+            crudActions.create().execute(Object.class);
             CreateActionMatchers.createAction().executed(Object.class).match(mvcResult);
             CreateActionMatchers.createAction().executed(equalTo(Object.class)).match(mvcResult);
         }

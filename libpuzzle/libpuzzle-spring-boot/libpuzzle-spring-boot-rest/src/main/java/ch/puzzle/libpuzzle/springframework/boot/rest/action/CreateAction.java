@@ -14,21 +14,21 @@ public class CreateAction<TEntity> {
 
     private DtoMapper mapper;
 
-    private Supplier<Object> dtoSupplier = IllegalActionParam.missingParam(CreateAction.class, "from");
+    private Supplier<Object> dtoSupplier = IllegalActionParam.missingParam(CreateAction.class, "with");
 
-    private Supplier<TEntity> entitySupplier = IllegalActionParam.missingParam(CreateAction.class, "with");
+    private Supplier<TEntity> entitySupplier = IllegalActionParam.missingParam(CreateAction.class, "using");
 
     public CreateAction(CrudRepository<TEntity, ?> repository, DtoMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
 
-    public <TDto> CreateAction<TEntity> from(TDto requestDto) {
+    public <TDto> CreateAction<TEntity> with(TDto requestDto) {
         dtoSupplier = () -> requestDto;
         return this;
     }
 
-    public CreateAction<TEntity> with(TEntity initialEntity) {
+    public CreateAction<TEntity> using(TEntity initialEntity) {
         entitySupplier = () -> initialEntity;
         return this;
     }

@@ -32,8 +32,8 @@ public class HeroController {
     @PostMapping
     public ResponseEntity<HeroDto> create(@RequestBody @Valid HeroDto dto) {
         return actions.create()
-                .from(dto)
-                .with(new Hero())
+                .with(dto)
+                .using(new Hero())
                 .execute(HeroDto.class);
     }
 
@@ -41,7 +41,7 @@ public class HeroController {
     public ResponseEntity<HeroDto> update(@PathVariable long id, @RequestBody @Valid HeroDto dto) {
         return actions.update()
                 .by(id)
-                .dto(dto)
+                .with(dto)
                 .execute(HeroDto.class);
     }
 
