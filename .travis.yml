@@ -5,7 +5,7 @@ jdk:
 jobs:
   include:
     - stage: publish
-      script: mvn -f libpuzzle -s .travis-mvn.xml deploy -DskipTests
+      script: mvn -s .travis-mvn.xml deploy -DskipTests -Dflatten
 
 stages:
   - compile
