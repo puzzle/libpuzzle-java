@@ -8,10 +8,10 @@ jobs:
       script:
         - openssl aes-256-cbc -K $encrypted_3d03fa02db61_key -iv $encrypted_3d03fa02db61_iv -in gpg.asc.enc -out gpg.asc -d
         - gpg --import gpg.asc
-        - mvn -s .travis-mvn.xml deploy -DskipTests -Dflatten -Dsign -Dgpg.passphrase=$GPG_PASSPHRASE
+        - mvn -s .travis-mvn.xml deploy -DskipTests -Drelease -Dgpg.passphrase=$GPG_PASSPHRASE
 
 stages:
   - compile
   - test
   - name: publish
-    if: branch = master OR tag IS present
+    if: branch = master OR tag IS present OR branch = feature/meet-ossrh-reqs
