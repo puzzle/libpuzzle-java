@@ -1,15 +1,12 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.update;
 
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.CrudActions;
-import ch.puzzle.libpuzzle.springframework.boot.rest.action.UpdateAction;
+import ch.puzzle.libpuzzle.springframework.boot.rest.action.CrudActions;
 import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.exception.ActionAssertionError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -24,12 +21,11 @@ import static org.mockito.Mockito.doReturn;
 
 
 @ExtendWith(MockitoExtension.class)
-@RunWith(JUnitPlatform.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class UpdateActionResultMatchersTest {
 
     @Mock
-    private CrudActions<?, ?, ?, UpdateAction<Object, Object>, ?> crudActions;
+    private CrudActions<?, Object, ?, ?> crudActions;
 
     @Mock
     private MvcResult mvcResult;
@@ -81,10 +77,10 @@ public class UpdateActionResultMatchersTest {
         public void testNoInvocation() {
             crudActions.update();
             assertThrows(ActionAssertionError.class, () ->
-                    UpdateActionMatchers.updateAction().dto(Object.class).match(mvcResult)
+                    UpdateActionMatchers.updateAction().with(Object.class).match(mvcResult)
             );
             assertThrows(ActionAssertionError.class, () ->
-                    UpdateActionMatchers.updateAction().dto(equalTo(Object.class)).match(mvcResult)
+                    UpdateActionMatchers.updateAction().with(equalTo(Object.class)).match(mvcResult)
             );
         }
 
@@ -92,18 +88,18 @@ public class UpdateActionResultMatchersTest {
         public void tesDifferentInvocation() {
             crudActions.update().with(String.class);
             assertThrows(ActionAssertionError.class, () ->
-                    UpdateActionMatchers.updateAction().dto(Object.class).match(mvcResult)
+                    UpdateActionMatchers.updateAction().with(Object.class).match(mvcResult)
             );
             assertThrows(ActionAssertionError.class, () ->
-                    UpdateActionMatchers.updateAction().dto(equalTo(Object.class)).match(mvcResult)
+                    UpdateActionMatchers.updateAction().with(equalTo(Object.class)).match(mvcResult)
             );
         }
 
         @Test
         public void testCorrectInvocation() throws Exception {
             crudActions.update().with(Object.class);
-            UpdateActionMatchers.updateAction().dto(Object.class).match(mvcResult);
-            UpdateActionMatchers.updateAction().dto(equalTo(Object.class)).match(mvcResult);
+            UpdateActionMatchers.updateAction().with(Object.class).match(mvcResult);
+            UpdateActionMatchers.updateAction().with(equalTo(Object.class)).match(mvcResult);
         }
     }
 
@@ -156,6 +152,24 @@ public class UpdateActionResultMatchersTest {
             crudActions.update().execute(Object.class);
             UpdateActionMatchers.updateAction().executed(Object.class).match(mvcResult);
             UpdateActionMatchers.updateAction().executed(equalTo(Object.class)).match(mvcResult);
+        }
+    }
+
+    @Nested
+    public class NotExecuted {
+
+        @Test
+        public void testWithInvocation() {
+            crudActions.update().execute(Object.class);
+            assertThrows(ActionAssertionError.class, () ->
+                    UpdateActionMatchers.updateAction().notExecuted().match(mvcResult)
+            );
+        }
+
+        @Test
+        public void testWithoutInvocation() throws Exception {
+            crudActions.update();
+            UpdateActionMatchers.updateAction().notExecuted().match(mvcResult);
         }
     }
 }

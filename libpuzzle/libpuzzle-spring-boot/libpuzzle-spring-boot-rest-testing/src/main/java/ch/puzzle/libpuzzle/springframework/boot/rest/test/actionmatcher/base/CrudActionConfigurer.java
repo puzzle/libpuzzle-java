@@ -1,6 +1,6 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base;
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.CrudActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.action.CrudActions;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcConfigurer;
@@ -9,47 +9,47 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.reset;
 
-public abstract class CrudActionConfigurer<TCrudActions extends CrudActions, TAction> implements MockMvcConfigurer {
+public abstract class CrudActionConfigurer<TActionBuilder> implements MockMvcConfigurer {
 
-    protected final TCrudActions crudActions;
+    protected final CrudActions<?, ?, ?, ?> crudActions;
 
-    private final TAction action;
+    private final TActionBuilder actionBuilder;
 
-    protected CrudActionConfigurer(TCrudActions crudActions) {
+    protected CrudActionConfigurer(CrudActions<?, ?, ?, ?> crudActions) {
         this.crudActions = crudActions;
-        this.action = createAction(crudActions);
+        this.actionBuilder = createActionBuilder(crudActions);
     }
 
     @Override
     public RequestPostProcessor beforeMockMvcCreated(
             ConfigurableMockMvcBuilder<?> builder, WebApplicationContext context
     ) {
-        mockCrudActions(crudActions, action);
+        mockCrudActions(crudActions, actionBuilder);
         return (request) -> {
-            request.setAttribute(getClass().getName(), action);
+            request.setAttribute(getClass().getName(), actionBuilder);
             return request;
         };
     }
 
-    private TAction createAction(TCrudActions crudActions) {
-        return mockingDetails(crudActions).isSpy() ? createActionSpy(crudActions) : createActionMock(crudActions);
+    private TActionBuilder createActionBuilder(CrudActions<?, ?, ?, ?> crudActions) {
+        return mockingDetails(crudActions).isSpy() ? createActionBuilderSpy(crudActions) : createActionBuilderMock(crudActions);
     }
 
-    private TAction createActionSpy(TCrudActions crudActions) {
-        var action = createActionSpy();
+    private TActionBuilder createActionBuilderSpy(CrudActions<?, ?, ?, ?> crudActions) {
+        var action = createActionBuilderSpy();
         reset(crudActions);
         return action;
     }
 
-    private TAction createActionMock(TCrudActions crudActions) {
-        var action = createActionMock();
+    private TActionBuilder createActionBuilderMock(CrudActions<?, ?, ?, ?> crudActions) {
+        var action = createActionBuilderMock();
         reset(crudActions);
         return action;
     }
 
-    abstract protected TAction createActionMock();
+    abstract protected TActionBuilder createActionBuilderMock();
 
-    abstract protected TAction createActionSpy();
+    abstract protected TActionBuilder createActionBuilderSpy();
 
-    abstract protected void mockCrudActions(TCrudActions crudActions, TAction action);
+    abstract protected void mockCrudActions(CrudActions<?, ?, ?, ?> crudActions, TActionBuilder action);
 }

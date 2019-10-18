@@ -11,6 +11,10 @@ public class ActionAssertionError extends ComparisonFailure {
 
     private static final Pattern EXECUTE_PARAM_PATTERN = Pattern.compile("(?<=\\().*(?=\\))", Pattern.DOTALL);
 
+    private static final String STATE_ACTION_EXECUTED = "<action executed>";
+
+    private static final String STATE_ACTION_NOT_EXECUTED = "<action not executed>";
+
     private int stackTraceLevelsToRemove;
 
     private ActionAssertionError(String message, String expected, String actual, int stackTraceLevelsToRemove) {
@@ -30,7 +34,7 @@ public class ActionAssertionError extends ComparisonFailure {
     /**
      * Prints the stack trace using the given PrintWriter.
      * <p>
-     * Ensures that all internal method calls are removed from the stack trace so that the first element references to
+     * Ensures that all internal method calls are removed skip the stack trace so that the first element references to
      * the method call in the test class.
      *
      * @param s PrintWriter to print the stack trace using.
@@ -71,8 +75,21 @@ public class ActionAssertionError extends ComparisonFailure {
     public static ActionAssertionError missingActionExecution(int stackTraceLevelsToRemove) {
         return new ActionAssertionError(
                 "Action was not executed.",
-                "<action was executed>",
-                "<action was not executed>",
+                STATE_ACTION_EXECUTED,
+                STATE_ACTION_NOT_EXECUTED,
+                ++stackTraceLevelsToRemove
+        );
+    }
+
+    public static ActionAssertionError unwantedActionExecution() {
+        return unwantedActionExecution(FACTORY_METHOD_STACK_TRACE_LEVELS_TO_REMOVE);
+    }
+
+    public static ActionAssertionError unwantedActionExecution(int stackTraceLevelsToRemove) {
+        return new ActionAssertionError(
+                "Action was executed.",
+                STATE_ACTION_NOT_EXECUTED,
+                STATE_ACTION_EXECUTED,
                 ++stackTraceLevelsToRemove
         );
     }

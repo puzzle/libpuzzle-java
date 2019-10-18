@@ -1,6 +1,7 @@
 package ch.puzzle.libpuzzle.demo.springboot.hero;
 
 import ch.puzzle.libpuzzle.demo.springboot.common.ApiActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.test.util.Resource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,15 +14,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.create.CreateActionConfigurer.mockedCreateAction;
+import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.CompositeActionConfigurer.mockedActions;
 import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.create.CreateActionMatchers.createAction;
-import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.delete.DeleteActionConfigurer.mockedDeleteAction;
 import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.delete.DeleteActionMatchers.deleteAction;
-import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.find.FindActionConfigurer.mockedFindAction;
 import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.find.FindActionMatchers.findAction;
-import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.list.ListActionConfigurer.mockedListAction;
 import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.list.ListActionMatchers.listAction;
-import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.update.UpdateActionConfigurer.mockedUpdateAction;
 import static ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.update.UpdateActionMatchers.updateAction;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,11 +38,11 @@ public class HeroControllerTest {
 
     private static final HeroDto NEW_HERO_DTO = HeroDto.builder().name("new-hero").build();
 
-    private static final String NEW_HERO_DTO_JSON = "{\"name\": \"new-hero\"}";
+    private static final String NEW_HERO_DTO_JSON = Resource.content("hero/create-hero-body.json");
 
     private static final HeroDto EXISTING_HERO_DTO = HeroDto.builder().id(RESOURCE_ID).name("existing-hero").build();
 
-    private static final String EXITING_HERO_DTO_JSON = "{\"id\": 1, \"name\": \"existing-hero\"}";
+    private static final String EXITING_HERO_DTO_JSON = Resource.content("hero/update-hero-body.json");
 
     @Autowired
     private WebApplicationContext context;
@@ -58,11 +55,7 @@ public class HeroControllerTest {
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(mockedListAction(restActions))
-                .apply(mockedFindAction(restActions))
-                .apply(mockedUpdateAction(restActions))
-                .apply(mockedCreateAction(restActions))
-                .apply(mockedDeleteAction(restActions))
+                .apply(mockedActions(restActions))
                 .build();
     }
 
@@ -101,7 +94,7 @@ public class HeroControllerTest {
                         .content(EXITING_HERO_DTO_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(updateAction().by(RESOURCE_ID))
-                .andExpect(updateAction().dto(EXISTING_HERO_DTO))
+                .andExpect(updateAction().with(EXISTING_HERO_DTO))
                 .andExpect(updateAction().executed());
     }
 
@@ -112,5 +105,4 @@ public class HeroControllerTest {
                 .andExpect(deleteAction().by(RESOURCE_ID))
                 .andExpect(deleteAction().executed());
     }
-
 }

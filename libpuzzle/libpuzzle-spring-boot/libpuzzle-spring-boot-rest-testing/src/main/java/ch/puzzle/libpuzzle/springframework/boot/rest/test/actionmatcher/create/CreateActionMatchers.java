@@ -1,19 +1,20 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.create;
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.action.CreateAction;
+import ch.puzzle.libpuzzle.springframework.boot.rest.action.create.CreateActionBuilder;
 import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.ActionMatchers;
 import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.ActionResultMatcher;
 import org.hamcrest.Matcher;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
-public class CreateActionMatchers<TEntity> implements ActionMatchers<CreateAction<TEntity>> {
+public class CreateActionMatchers implements ActionMatchers<CreateActionBuilder<Object, ?, ?>> {
 
-    public static <TEntity> CreateActionMatchers<TEntity> createAction() {
-        return new CreateActionMatchers<>();
+    public static CreateActionMatchers createAction() {
+        return new CreateActionMatchers();
     }
 
     @Override
@@ -29,15 +30,19 @@ public class CreateActionMatchers<TEntity> implements ActionMatchers<CreateActio
         return executed(equalTo(responseClass));
     }
 
+    public ActionResultMatcher notExecuted() {
+        return result -> verify(result.action(this), never()).execute(any());
+    }
+
     public ActionResultMatcher executed(Matcher<Class<?>> matcher) {
         return result -> verify(result.action(this)).execute(argThat(matcher));
     }
 
-    public ActionResultMatcher using(TEntity id) {
+    public ActionResultMatcher using(Object id) {
         return using(equalTo(id));
     }
 
-    public ActionResultMatcher using(Matcher<TEntity> matcher) {
+    public ActionResultMatcher using(Matcher<Object> matcher) {
         return result -> verify(result.action(this)).using(argThat(matcher));
     }
 
