@@ -2,6 +2,7 @@ package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base;
 
 import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.exception.ActionAssertionError;
 import junit.framework.ComparisonFailure;
+import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -18,6 +19,8 @@ public interface ActionResultMatcher extends ResultMatcher {
             throw ActionAssertionError.wrongActionParams(e);
         } catch (WantedButNotInvoked e) {
             throw ActionAssertionError.missingActionExecution();
+        } catch (NeverWantedButInvoked e) {
+            throw ActionAssertionError.unwantedActionExecution();
         }
     }
 }

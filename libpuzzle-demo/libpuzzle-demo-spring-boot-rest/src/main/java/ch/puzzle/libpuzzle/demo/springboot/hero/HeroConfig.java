@@ -1,7 +1,7 @@
 package ch.puzzle.libpuzzle.demo.springboot.hero;
 
 import ch.puzzle.libpuzzle.demo.springboot.common.ApiActions;
-import ch.puzzle.libpuzzle.springframework.boot.rest.action.RepositoryActions;
+import ch.puzzle.libpuzzle.springframework.boot.rest.repository.actionfactory.RepositoryActionsFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,11 +9,10 @@ import org.springframework.context.annotation.Configuration;
 public class HeroConfig {
 
     @Bean
-    public ApiActions<Hero> restActions(HeroRepository repository, RepositoryActions repositoryActions) {
-        var actions = new ApiActions<Hero>();
-        actions.configure()
-                .use(repositoryActions.forRepository(repository));
-        return actions;
+    public ApiActions<Hero> heroActions(HeroRepository repository, RepositoryActionsFactory repositoryActionsFactory) {
+        var repositoryActions = repositoryActionsFactory.forRepository(repository);
+        return ApiActions.configure(new ApiActions<Hero>())
+                .with(repositoryActions.all())
+                .apply();
     }
-
 }

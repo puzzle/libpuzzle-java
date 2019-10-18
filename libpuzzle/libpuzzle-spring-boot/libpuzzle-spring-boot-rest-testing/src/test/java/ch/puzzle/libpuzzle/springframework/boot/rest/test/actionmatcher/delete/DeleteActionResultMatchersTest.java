@@ -1,15 +1,12 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.delete;
 
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.CrudActions;
-import ch.puzzle.libpuzzle.springframework.boot.rest.action.DeleteAction;
+import ch.puzzle.libpuzzle.springframework.boot.rest.action.CrudActions;
 import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.exception.ActionAssertionError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -23,12 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
-@RunWith(JUnitPlatform.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class DeleteActionResultMatchersTest {
 
     @Mock
-    private CrudActions<?, ?, ?, ?, DeleteAction<Object>> crudActions;
+    private CrudActions<?, Object, ?, ?> crudActions;
 
     @Mock
     private MvcResult mvcResult;
@@ -89,6 +85,24 @@ public class DeleteActionResultMatchersTest {
         public void testCorrectInvocation() throws Exception {
             crudActions.delete().execute();
             DeleteActionMatchers.deleteAction().executed().match(mvcResult);
+        }
+    }
+
+    @Nested
+    public class NotExecuted {
+
+        @Test
+        public void testWithInvocation() {
+            crudActions.delete().execute();
+            assertThrows(ActionAssertionError.class, () ->
+                    DeleteActionMatchers.deleteAction().notExecuted().match(mvcResult)
+            );
+        }
+
+        @Test
+        public void testWithoutInvocation() throws Exception {
+            crudActions.delete();
+            DeleteActionMatchers.deleteAction().notExecuted().match(mvcResult);
         }
     }
 }
