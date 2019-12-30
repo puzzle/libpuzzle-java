@@ -1,0 +1,13 @@
+plugins {
+    id "io.freefair.lombok" version "4.1.6"
+}
+
+dependencies {
+    implementation project(':libpuzzle:libpuzzle-spring-boot:libpuzzle-spring-boot-rest')
+    implementation 'org.springframework.boot:spring-boot-starter-test:2.2.2.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.2.2.RELEASE'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:2.23.0'
+}
+
+description = 'libpuzzle Spring Boot REST Testing'

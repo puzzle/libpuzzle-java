@@ -1,0 +1,4 @@
+dependencies {
+    implementation 'javax:javaee-api:8.0'
+    compileOnly 'org.modelmapper:modelmapper:[2.3.0,)'
+}

@@ -1,0 +1,73 @@
+plugins {
+    id "de.marcphilipp.nexus-publish" apply false
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'signing'
+    apply plugin: "de.marcphilipp.nexus-publish"
+
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+
+    task sourcesJar(type: Jar) {
+        archiveClassifier = 'sources'
+        from sourceSets.main.allJava
+    }
+
+    task javadocJar(type: Jar) {
+        archiveClassifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from(components.java)
+                artifact sourcesJar
+                artifact javadocJar
+
+                pom {
+                    name = artifactId
+                    packaging = 'jar'
+                    description = 'A set of useful libraries'
+                    url = 'https://github.com/puzzle/libpuzzle-java'
+
+                    scm {
+                        connection = 'scm:git:git@github.com:puzzle/libpuzzle-java.git'
+                        developerConnection = 'scm:git:git@github.com:puzzle/libpuzzle-java.git'
+                        url = 'git@github.com:puzzle/libpuzzle-java.git'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'http://www.opensource.org/licenses/mit-license.php'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'github'
+                            name = 'GitHub Contributors'
+                            url = 'https://github.com/puzzle/libpuzzle-java/graphs/contributors'
+                            organization = 'Puzzle ITC GmbH'
+                            organizationUrl = 'https://puzzle.ch'
+                        }
+                    }
+                }
+            }
+        }
+    }
+    nexusPublishing {
+        repositories {
+            sonatype()
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}

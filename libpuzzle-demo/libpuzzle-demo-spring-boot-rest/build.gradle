@@ -1,0 +1,15 @@
+plugins {
+    id "io.freefair.lombok" version "4.1.6"
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.2.2.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.2.2.RELEASE'
+    implementation 'com.h2database:h2:1.4.197'
+    implementation 'org.modelmapper:modelmapper:2.3.0'
+    implementation project(':libpuzzle:libpuzzle-spring-boot:libpuzzle-spring-boot-rest')
+    testImplementation project(':libpuzzle:libpuzzle-spring-boot:libpuzzle-spring-boot-rest-testing')
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.2.2.RELEASE'
+}
+
+description = 'libpuzzle Demo Spring Boot REST'
