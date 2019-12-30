@@ -1,0 +1,23 @@
+plugins {
+    id 'io.codearte.nexus-staging' version '0.21.2'
+    id 'de.marcphilipp.nexus-publish' version '0.4.0' // Required for successful publish on travis
+}
+
+allprojects {
+    group = 'ch.puzzle'
+    version = '0.1.0-SNAPSHOT'
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+def ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : ''
+def ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : ''
+
+nexusStaging.packageGroup = 'ch.puzzle'
+nexusStaging.username = ossrhUsername
+nexusStaging.password = ossrhPassword

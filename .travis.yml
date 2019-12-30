@@ -2,16 +2,34 @@ language: java
 jdk:
   - openjdk11
 
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
 jobs:
   include:
+    - stage: compile
+      script: ./gradlew compileJava
+    - script: ./gradlew compileTestJava
+    - stage: test
+      script: ./gradlew test
     - stage: publish
       script:
-        - openssl aes-256-cbc -K $encrypted_3d03fa02db61_key -iv $encrypted_3d03fa02db61_iv -in gpg.asc.enc -out gpg.asc -d
-        - gpg --import gpg.asc
-        - mvn -s .travis-mvn.xml deploy -DskipTests -Drelease -Dgpg.passphrase=$GPG_PASSPHRASE
-
+        - openssl aes-256-cbc -K $encrypted_3d03fa02db61_key -iv $encrypted_3d03fa02db61_iv -in secring.gpg.enc -out secring.gpg -d
+        - |
+          ./gradlew \
+          -Psigning.keyId=7A728751 \
+          -Psigning.secretKeyRingFile=${PWD}/secring.gpg \
+          -Psigning.password=${GPG_PASSPHRASE} \
+          -PossrhUsername=${OSSRH_USERNAME} \
+          -PossrhPassword=${OSSRH_PASSWORD} \
+          publishToSonatype closeAndReleaseRepository
 stages:
   - compile
   - test
   - name: publish
-    if: branch = master OR tag IS present OR branch = feature/meet-ossrh-reqs
+    if: tag IS present

@@ -1,0 +1,15 @@
+plugins {
+    id "io.freefair.lombok" version "4.1.6"
+    id 'java'
+}
+
+dependencies {
+    compileOnly 'org.modelmapper:modelmapper:2.3.0'
+    implementation 'org.springframework:spring-web:5.2.2.RELEASE'
+    implementation 'org.springframework:spring-context:5.2.2.RELEASE'
+    implementation 'org.springframework.data:spring-data-commons:2.2.2.RELEASE'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:3.2.4'
+}
+
+description = 'libpuzzle Spring Boot REST'

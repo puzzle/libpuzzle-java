@@ -26,6 +26,12 @@ hs_err_pid*
 **/target/*
 .flattened-pom.xml
 
+# Gradle stuff
+**/build/*
+**/.gradle/*
+!gradle-wrapper.jar
+secring.gpg
+
 # IntelliJ stuff
 .idea
 *.iml

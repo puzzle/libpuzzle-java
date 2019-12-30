@@ -1,0 +1,8 @@
+rootProject.name = 'libpuzzle-parent'
+
+include 'libpuzzle:libpuzzle-modelmapper'
+include 'libpuzzle:libpuzzle-spring-boot'
+include 'libpuzzle:libpuzzle-spring-boot:libpuzzle-spring-boot-rest'
+include 'libpuzzle:libpuzzle-spring-boot:libpuzzle-spring-boot-rest-testing'
+
+include 'libpuzzle-demo:libpuzzle-demo-spring-boot-rest'
