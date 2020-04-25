@@ -12,11 +12,11 @@ import static org.mockito.Mockito.spy;
 
 public class ListActionConfigurer extends CrudActionConfigurer<ListActionBuilder<?, ?>> {
 
-    private ListActionConfigurer(CrudActions<?, ?, ?, ?> crudActions) {
+    private ListActionConfigurer(CrudActions<?, ?, ?> crudActions) {
         super(crudActions);
     }
 
-    public static ListActionConfigurer mockedListAction(CrudActions<?, ?, ?, ?> crudActions) {
+    public static ListActionConfigurer mockedListAction(CrudActions<?, ?, ?> crudActions) {
         return new ListActionConfigurer(crudActions);
     }
 
@@ -36,7 +36,7 @@ public class ListActionConfigurer extends CrudActionConfigurer<ListActionBuilder
     }
 
     @Override
-    protected void mockCrudActions(final CrudActions<?, ?, ?, ?> crudActions, final ListActionBuilder<?, ?> action) {
+    protected void mockCrudActions(final CrudActions<?, ?, ?> crudActions, final ListActionBuilder<?, ?> action) {
         doReturn(action).when(crudActions).list();
     }
 }

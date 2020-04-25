@@ -11,11 +11,11 @@ import static org.mockito.Mockito.spy;
 
 public class CreateActionConfigurer extends CrudActionConfigurer<CreateActionBuilder<?, ?, ?>> {
 
-    private CreateActionConfigurer(CrudActions<?, ?, ?, ?> crudActions) {
+    private CreateActionConfigurer(CrudActions<?, ?, ?> crudActions) {
         super(crudActions);
     }
 
-    public static CreateActionConfigurer mockedCreateAction(CrudActions<?, ?, ?, ?> crudActions) {
+    public static CreateActionConfigurer mockedCreateAction(CrudActions<?, ?, ?> crudActions) {
         return new CreateActionConfigurer(crudActions);
     }
 
@@ -34,7 +34,7 @@ public class CreateActionConfigurer extends CrudActionConfigurer<CreateActionBui
     }
 
     @Override
-    protected void mockCrudActions(CrudActions<?, ?, ?, ?> crudActions, CreateActionBuilder<?, ?, ?> action) {
+    protected void mockCrudActions(CrudActions<?, ?, ?> crudActions, CreateActionBuilder<?, ?, ?> action) {
         doReturn(action).when(crudActions).create();
     }
 }

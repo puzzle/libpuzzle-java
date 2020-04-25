@@ -24,7 +24,7 @@ import static org.mockito.Mockito.doReturn;
 public class FindActionResultMatchersTest {
 
     @Mock
-    private CrudActions<?, Object, ?, ?> crudActions;
+    private CrudActions<?, Object, ?> crudActions;
 
     @Mock
     private MvcResult mvcResult;

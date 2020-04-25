@@ -12,7 +12,7 @@ import ch.puzzle.libpuzzle.springframework.boot.rest.action.update.UpdateActionB
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.update.UpdateActionExecution;
 import org.springframework.beans.factory.annotation.Value;
 
-public abstract class CrudActions<TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter, TCrudActions>> {
+public abstract class CrudActions<TEntity, TIdentifier, TFilter> extends ConfigurableCrudActions<TEntity, TIdentifier, TFilter> {
 
     @Value("${libpuzzle.rest.actions.list.defaults.offset:0}")
     private int defaultListOffset;
@@ -20,9 +20,9 @@ public abstract class CrudActions<TEntity, TIdentifier, TFilter, TCrudActions ex
     @Value("${libpuzzle.rest.actions.list.defaults.limit:" + Integer.MAX_VALUE + "}")
     private int defaultListLimit;
 
-    private CrudActionsPreset<TEntity, TIdentifier, TFilter, TCrudActions> preset;
+    private CrudActionsPreset<TEntity, TIdentifier, TFilter, ?> preset;
 
-    public static <TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter,TCrudActions>> CrudActionsPreset<TEntity, TIdentifier, TFilter, TCrudActions> configure(TCrudActions actions) {
+    public static <TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> CrudActionsPreset<TEntity, TIdentifier, TFilter, TCrudActions> configure(TCrudActions actions) {
         return new CrudActionsPreset<>(actions);
     }
 
@@ -46,7 +46,7 @@ public abstract class CrudActions<TEntity, TIdentifier, TFilter, TCrudActions ex
         return new DeleteActionExecution<>(preset.deleteAction);
     }
 
-    void apply(CrudActionsPreset<TEntity, TIdentifier, TFilter, TCrudActions> config) {
+    void apply(CrudActionsPreset<TEntity, TIdentifier, TFilter, ?> config) {
         if (null != this.preset) {
             throw new IllegalStateException(String.format("Preset is already defined for %s.", this));
         }

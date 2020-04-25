@@ -37,14 +37,14 @@ public class CompositeActionConfigurer implements MockMvcConfigurer {
         };
     }
 
-    public static MockMvcConfigurer mockedReadActions(CrudActions<?, ?, ?, ?> crudActions) {
+    public static MockMvcConfigurer mockedReadActions(CrudActions<?, ?, ?> crudActions) {
         return new CompositeActionConfigurer(Set.of(
                 mockedFindAction(crudActions),
                 mockedListAction(crudActions)
         ));
     }
 
-    public static MockMvcConfigurer mockedWriteActions(CrudActions<?, ?, ?, ?> crudActions) {
+    public static MockMvcConfigurer mockedWriteActions(CrudActions<?, ?, ?> crudActions) {
         return new CompositeActionConfigurer(Set.of(
                 mockedCreateAction(crudActions),
                 mockedUpdateAction(crudActions),
@@ -52,7 +52,7 @@ public class CompositeActionConfigurer implements MockMvcConfigurer {
         ));
     }
 
-    public static MockMvcConfigurer mockedResourceActions(CrudActions<?, ?, ?, ?> crudActions) {
+    public static MockMvcConfigurer mockedResourceActions(CrudActions<?, ?, ?> crudActions) {
         return new CompositeActionConfigurer(Set.of(
                 mockedCreateAction(crudActions),
                 mockedFindAction(crudActions),
@@ -61,7 +61,7 @@ public class CompositeActionConfigurer implements MockMvcConfigurer {
         ));
     }
 
-    public static MockMvcConfigurer mockedActions(CrudActions<?, ?, ?, ?> crudActions) {
+    public static MockMvcConfigurer mockedActions(CrudActions<?, ?, ?> crudActions) {
         return new CompositeActionConfigurer(Set.of(
                 mockedCreateAction(crudActions),
                 mockedFindAction(crudActions),

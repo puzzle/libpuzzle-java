@@ -11,11 +11,11 @@ import static org.mockito.Mockito.spy;
 
 public class DeleteActionConfigurer extends CrudActionConfigurer<DeleteActionBuilder<?>> {
 
-    private DeleteActionConfigurer(CrudActions<?, ?, ?, ?> crudActions) {
+    private DeleteActionConfigurer(CrudActions<?, ?, ?> crudActions) {
         super(crudActions);
     }
 
-    public static DeleteActionConfigurer mockedDeleteAction(CrudActions<?, ?, ?, ?> crudActions) {
+    public static DeleteActionConfigurer mockedDeleteAction(CrudActions<?, ?, ?> crudActions) {
         return new DeleteActionConfigurer(crudActions);
     }
 
@@ -33,7 +33,7 @@ public class DeleteActionConfigurer extends CrudActionConfigurer<DeleteActionBui
     }
 
     @Override
-    protected void mockCrudActions(CrudActions<?, ?, ?, ?> crudActions, DeleteActionBuilder<?> action) {
+    protected void mockCrudActions(CrudActions<?, ?, ?> crudActions, DeleteActionBuilder<?> action) {
         doReturn(action).when(crudActions).delete();
     }
 }

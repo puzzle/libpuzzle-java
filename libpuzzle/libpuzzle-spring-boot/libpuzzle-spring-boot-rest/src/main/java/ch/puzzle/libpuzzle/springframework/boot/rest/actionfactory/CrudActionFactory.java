@@ -21,24 +21,24 @@ public abstract class CrudActionFactory<TEntity, TIdentifier, TFilter> {
 
     public abstract DeleteAction<TIdentifier> delete();
 
-    public <TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter, TCrudActions>> CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> readOnly() {
+    public <TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> readOnly() {
         return new ReadActionsPresetConfigurer<>(this);
     }
 
-    public <TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter, TCrudActions>> CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> writeOnly() {
+    public <TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> writeOnly() {
         return new WriteActionsPresetConfigurer<>(this);
     }
 
-    public <TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter, TCrudActions>> CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> resourceOnly() {
+    public <TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> resourceOnly() {
         return new ResourceActionsPresetConfigurer<>(this);
     }
 
-    public <TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter, TCrudActions>> CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> all() {
+    public <TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> all() {
         return new AllActionsPresetConfigurer<>(this);
     }
 
     @RequiredArgsConstructor
-    private static final class ReadActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter, TCrudActions>> implements CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> {
+    private static final class ReadActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> implements CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> {
 
         private final CrudActionFactory<TEntity, TIdentifier, TFilter> crudActionFactory;
 
@@ -51,7 +51,7 @@ public abstract class CrudActionFactory<TEntity, TIdentifier, TFilter> {
     }
 
     @RequiredArgsConstructor
-    private static final class WriteActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter, TCrudActions>> implements CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> {
+    private static final class WriteActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> implements CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> {
 
         private final CrudActionFactory<TEntity, TIdentifier, TFilter> crudActionFactory;
 
@@ -65,7 +65,7 @@ public abstract class CrudActionFactory<TEntity, TIdentifier, TFilter> {
     }
 
     @RequiredArgsConstructor
-    private static final class ResourceActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter, TCrudActions>> implements CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> {
+    private static final class ResourceActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> implements CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> {
 
         private final CrudActionFactory<TEntity, TIdentifier, TFilter> repositoryActions;
 
@@ -80,7 +80,7 @@ public abstract class CrudActionFactory<TEntity, TIdentifier, TFilter> {
     }
 
     @RequiredArgsConstructor
-    private static final class AllActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter, TCrudActions>> implements CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> {
+    private static final class AllActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> implements CrudActionsPresetConfigurer<TEntity, TIdentifier, TFilter, TCrudActions> {
 
         private final CrudActionFactory<TEntity, TIdentifier, TFilter> repositoryActions;
 

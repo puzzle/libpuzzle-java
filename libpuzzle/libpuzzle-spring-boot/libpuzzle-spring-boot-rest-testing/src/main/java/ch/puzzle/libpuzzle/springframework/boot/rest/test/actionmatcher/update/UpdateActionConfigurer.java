@@ -11,11 +11,11 @@ import static org.mockito.Mockito.spy;
 
 public class UpdateActionConfigurer extends CrudActionConfigurer<UpdateActionBuilder<?, ?, ?, ?>> {
 
-    private UpdateActionConfigurer(CrudActions<?, ?, ?, ?> crudActions) {
+    private UpdateActionConfigurer(CrudActions<?, ?, ?> crudActions) {
         super(crudActions);
     }
 
-    public static UpdateActionConfigurer mockedUpdateAction(CrudActions<?, ?, ?, ?> crudActions) {
+    public static UpdateActionConfigurer mockedUpdateAction(CrudActions<?, ?, ?> crudActions) {
         return new UpdateActionConfigurer(crudActions);
     }
 
@@ -34,7 +34,7 @@ public class UpdateActionConfigurer extends CrudActionConfigurer<UpdateActionBui
     }
 
     @Override
-    protected void mockCrudActions(CrudActions<?, ?, ?, ?> crudActions, UpdateActionBuilder<?, ?, ?, ?> action) {
+    protected void mockCrudActions(CrudActions<?, ?, ?> crudActions, UpdateActionBuilder<?, ?, ?, ?> action) {
         doReturn(action).when(crudActions).update();
     }
 }

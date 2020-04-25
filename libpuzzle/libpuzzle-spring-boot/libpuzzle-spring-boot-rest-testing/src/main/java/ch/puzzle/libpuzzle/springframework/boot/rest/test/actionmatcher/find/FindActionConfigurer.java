@@ -11,11 +11,11 @@ import static org.mockito.Mockito.spy;
 
 public class FindActionConfigurer extends CrudActionConfigurer<FindActionBuilder<?, ?>> {
 
-    private FindActionConfigurer(CrudActions<?, ?, ?, ?> crudActions) {
+    private FindActionConfigurer(CrudActions<?, ?, ?> crudActions) {
         super(crudActions);
     }
 
-    public static FindActionConfigurer mockedFindAction(CrudActions<?, ?, ?, ?> crudActions) {
+    public static FindActionConfigurer mockedFindAction(CrudActions<?, ?, ?> crudActions) {
         return new FindActionConfigurer(crudActions);
     }
 
@@ -33,7 +33,7 @@ public class FindActionConfigurer extends CrudActionConfigurer<FindActionBuilder
     }
 
     @Override
-    protected void mockCrudActions(final CrudActions<?, ?, ?, ?> crudActions, final FindActionBuilder<?, ?> action) {
+    protected void mockCrudActions(final CrudActions<?, ?, ?> crudActions, final FindActionBuilder<?, ?> action) {
         doReturn(action).when(crudActions).find();
     }
 }

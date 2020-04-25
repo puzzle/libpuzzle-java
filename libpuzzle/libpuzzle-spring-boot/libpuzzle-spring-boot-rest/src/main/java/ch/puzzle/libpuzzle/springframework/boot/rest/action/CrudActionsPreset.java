@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.With;
 
 @AllArgsConstructor
-public final class CrudActionsPreset<TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter, TCrudActions>> {
+public final class CrudActionsPreset<TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> {
 
     @With(AccessLevel.PRIVATE)
     final CreateAction<TEntity> createAction;
