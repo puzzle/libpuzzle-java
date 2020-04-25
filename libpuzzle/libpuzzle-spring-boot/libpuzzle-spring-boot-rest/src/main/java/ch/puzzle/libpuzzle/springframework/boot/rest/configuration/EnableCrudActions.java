@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import(CrudActionsConfig.class)
+@Import(CrudActionsSpringConfig.class)
 public @interface EnableCrudActions {
 }

@@ -20,36 +20,36 @@ public abstract class CrudActions<TEntity, TIdentifier, TFilter> extends Configu
     @Value("${libpuzzle.rest.actions.list.defaults.limit:" + Integer.MAX_VALUE + "}")
     private int defaultListLimit;
 
-    private CrudActionsPreset<TEntity, TIdentifier, TFilter, ?> preset;
+    private CrudActionsConfig<TEntity, TIdentifier, TFilter, ?> config;
 
-    public static <TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> CrudActionsPreset<TEntity, TIdentifier, TFilter, TCrudActions> configure(TCrudActions actions) {
-        return new CrudActionsPreset<>(actions);
+    public static <TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> CrudActionsConfig<TEntity, TIdentifier, TFilter, TCrudActions> configure(TCrudActions actions) {
+        return new CrudActionsConfig<>(actions);
     }
 
     public CreateActionBuilder<TEntity, Object, Object> create() {
-        return new CreateActionExecution<>(preset.createAction);
+        return new CreateActionExecution<>(config.createAction);
     }
 
     public FindActionBuilder<TIdentifier, Object> find() {
-        return new FindActionExecution<>(preset.findAction);
+        return new FindActionExecution<>(config.findAction);
     }
 
     public ListActionBuilder<TFilter, Object> list() {
-        return new ListActionExecution<>(preset.listAction, defaultListOffset, defaultListLimit);
+        return new ListActionExecution<>(config.listAction, defaultListOffset, defaultListLimit);
     }
 
     public UpdateActionBuilder<TEntity, TIdentifier, Object, Object> update() {
-        return new UpdateActionExecution<>(preset.updateAction);
+        return new UpdateActionExecution<>(config.updateAction);
     }
 
     public DeleteActionBuilder<TIdentifier> delete() {
-        return new DeleteActionExecution<>(preset.deleteAction);
+        return new DeleteActionExecution<>(config.deleteAction);
     }
 
-    void apply(CrudActionsPreset<TEntity, TIdentifier, TFilter, ?> config) {
-        if (null != this.preset) {
+    void apply(CrudActionsConfig<TEntity, TIdentifier, TFilter, ?> config) {
+        if (null != this.config) {
             throw new IllegalStateException(String.format("Preset is already defined for %s.", this));
         }
-        this.preset = config;
+        this.config = config;
     }
 }
