@@ -8,23 +8,29 @@ import ch.puzzle.libpuzzle.springframework.boot.rest.action.update.UpdateAction;
 import ch.puzzle.libpuzzle.springframework.boot.rest.actionfactory.CrudActionsConfigurer;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.With;
 
 @AllArgsConstructor
 public final class CrudActionsConfig<TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> {
 
+    @Getter
     @With(AccessLevel.PRIVATE)
     final CreateAction<TEntity> createAction;
 
+    @Getter
     @With(AccessLevel.PRIVATE)
     final FindAction<TIdentifier> findAction;
 
+    @Getter
     @With(AccessLevel.PRIVATE)
     final ListAction<TFilter> listAction;
 
+    @Getter
     @With(AccessLevel.PRIVATE)
     final UpdateAction<TIdentifier> updateAction;
 
+    @Getter
     @With(AccessLevel.PRIVATE)
     final DeleteAction<TIdentifier> deleteAction;
 

@@ -20,8 +20,6 @@ public abstract class CrudActions<TEntity, TIdentifier, TFilter> extends Configu
     @Value("${libpuzzle.rest.actions.list.defaults.limit:" + Integer.MAX_VALUE + "}")
     private int defaultListLimit;
 
-    private CrudActionsConfig<TEntity, TIdentifier, TFilter, ?> config;
-
     public static <TEntity, TIdentifier, TFilter, TCrudActions extends CrudActions<TEntity, TIdentifier, TFilter>> CrudActionsConfig<TEntity, TIdentifier, TFilter, TCrudActions> configure(TCrudActions actions) {
         return new CrudActionsConfig<>(actions);
     }
@@ -44,12 +42,5 @@ public abstract class CrudActions<TEntity, TIdentifier, TFilter> extends Configu
 
     public DeleteActionBuilder<TIdentifier> delete() {
         return new DeleteActionExecution<>(config.deleteAction);
-    }
-
-    void apply(CrudActionsConfig<TEntity, TIdentifier, TFilter, ?> config) {
-        if (null != this.config) {
-            throw new IllegalStateException(String.format("Preset is already defined for %s.", this));
-        }
-        this.config = config;
     }
 }
