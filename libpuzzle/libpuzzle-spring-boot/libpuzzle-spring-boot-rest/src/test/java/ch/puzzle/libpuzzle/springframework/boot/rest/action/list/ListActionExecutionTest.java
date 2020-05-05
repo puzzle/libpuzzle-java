@@ -30,24 +30,24 @@ public class ListActionExecutionTest {
 
     @Test
     public void testOffsetHasDefaultValue() {
-        int offset = execution.offset().get();
+        int offset = execution.params.offset().get();
         assertEquals(DEFAULT_OFFSET, offset);
     }
 
     @Test
     public void testLimitHasDefaultValue() {
-        int limit = execution.limit().get();
+        int limit = execution.params.limit().get();
         assertEquals(DEFAULT_LIMIT, limit);
     }
 
     @Test(expected = ParameterNotSetException.class)
     public void testFilterIsRequired() {
-        execution.filter().get();
+        execution.params.filter().get();
     }
 
     @Test(expected = ParameterNotSetException.class)
     public void testResponseDtoClassIsRequired() {
-        execution.responseDtoClass().get();
+        execution.params.responseDtoClass().get();
     }
 
     @Test

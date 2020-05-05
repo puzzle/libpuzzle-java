@@ -6,7 +6,6 @@ import ch.puzzle.libpuzzle.springframework.boot.rest.action.delete.DeleteActionB
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.delete.DeleteActionExecution;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.find.FindActionBuilder;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.find.FindActionExecution;
-import ch.puzzle.libpuzzle.springframework.boot.rest.action.list.ListActionBuilder;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.list.ListActionExecution;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.update.UpdateActionBuilder;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.update.UpdateActionExecution;
@@ -32,7 +31,7 @@ public abstract class CrudActions<TEntity, TIdentifier, TFilter> extends Configu
         return new FindActionExecution<>(config.findAction);
     }
 
-    public ListActionBuilder<TFilter, Object> list() {
+    public ListActionExecution<TFilter, Object> list() {
         return new ListActionExecution<>(config.listAction, defaultListOffset, defaultListLimit);
     }
 

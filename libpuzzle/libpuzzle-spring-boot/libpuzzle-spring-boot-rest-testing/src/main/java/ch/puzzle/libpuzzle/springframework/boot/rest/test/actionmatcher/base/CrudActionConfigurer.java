@@ -9,11 +9,11 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.reset;
 
-public abstract class CrudActionConfigurer<TActionBuilder> implements MockMvcConfigurer {
+public abstract class CrudActionConfigurer<TActionExecution> implements MockMvcConfigurer {
 
     protected final CrudActions<?, ?, ?> crudActions;
 
-    private final TActionBuilder actionBuilder;
+    private final TActionExecution actionBuilder;
 
     protected CrudActionConfigurer(CrudActions<?, ?, ?> crudActions) {
         this.crudActions = crudActions;
@@ -31,25 +31,25 @@ public abstract class CrudActionConfigurer<TActionBuilder> implements MockMvcCon
         };
     }
 
-    private TActionBuilder createActionBuilder(CrudActions<?, ?, ?> crudActions) {
+    private TActionExecution createActionBuilder(CrudActions<?, ?, ?> crudActions) {
         return mockingDetails(crudActions).isSpy() ? createActionBuilderSpy(crudActions) : createActionBuilderMock(crudActions);
     }
 
-    private TActionBuilder createActionBuilderSpy(CrudActions<?, ?, ?> crudActions) {
+    private TActionExecution createActionBuilderSpy(CrudActions<?, ?, ?> crudActions) {
         var action = createActionBuilderSpy();
         reset(crudActions);
         return action;
     }
 
-    private TActionBuilder createActionBuilderMock(CrudActions<?, ?, ?> crudActions) {
+    private TActionExecution createActionBuilderMock(CrudActions<?, ?, ?> crudActions) {
         var action = createActionBuilderMock();
         reset(crudActions);
         return action;
     }
 
-    abstract protected TActionBuilder createActionBuilderMock();
+    abstract protected TActionExecution createActionBuilderMock();
 
-    abstract protected TActionBuilder createActionBuilderSpy();
+    abstract protected TActionExecution createActionBuilderSpy();
 
-    abstract protected void mockCrudActions(CrudActions<?, ?, ?> crudActions, TActionBuilder action);
+    abstract protected void mockCrudActions(CrudActions<?, ?, ?> crudActions, TActionExecution action);
 }

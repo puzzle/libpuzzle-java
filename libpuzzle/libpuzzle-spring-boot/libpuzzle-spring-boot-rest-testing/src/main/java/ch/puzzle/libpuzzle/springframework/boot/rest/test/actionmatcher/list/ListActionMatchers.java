@@ -12,7 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 import static org.mockito.hamcrest.MockitoHamcrest.intThat;
 
-public class ListActionMatchers implements ActionMatchers<ListActionBuilder<Object, ?>> {
+public class ListActionMatchers implements ActionMatchers<ListActionBuilder<Object, ?, ?>> {
 
     public static ListActionMatchers listAction() {
         return new ListActionMatchers();
