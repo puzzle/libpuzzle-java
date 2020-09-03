@@ -35,7 +35,7 @@ public class RepositoryUpdateActionTest {
     private RepositoryUpdateAction<Object, String> action;
 
     @Mock
-    private UpdateActionParameters<String, Object, Object> params;
+    private UpdateActionParameters<String, Object> params;
 
     @Mock
     private CrudRepository<Object, String> repository;
@@ -49,37 +49,30 @@ public class RepositoryUpdateActionTest {
     @Mock
     private Object requestDto;
 
-    private Class<Object> responseDto = Object.class;
-
     @Before
     public void setup() {
         action = new RepositoryUpdateAction<>(repository, dtoMapper);
         when(repository.findById(anyString())).thenReturn(Optional.empty());
         when(repository.findById(eq(EXISTING_ENTITY_ID))).thenReturn(Optional.of(entity));
-        when(dtoMapper.map(same(entity), eq(Object.class))).thenReturn(responseDto);
         when(repository.save(any())).thenReturn(entity);
         doReturn(ActionParameter.holding(EXISTING_ENTITY_ID)).when(params).identifier();
         doReturn(ActionParameter.holding(requestDto)).when(params).requestDto();
-        doReturn(ActionParameter.holding(responseDto)).when(params).responseDtoClass();
     }
 
     @Test
     public void testExistingEntity() {
         var response = action.execute(params);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertSame(responseDto, response.getBody());
+        assertSame(entity, response);
         verify(repository).findById(any());
         verify(repository).findById(EXISTING_ENTITY_ID);
         verify(repository).save(same(entity));
         verify(dtoMapper).map(same(requestDto), same(entity));
     }
 
-    @Test
+    @Test(expected = RuntimeException.class) // FIXME
     public void testEntityNotFound() {
         doReturn(ActionParameter.holding(NOT_EXISTING_ENTITY_ID)).when(params).identifier();
         var response = action.execute(params);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertNull(response.getBody());
         verify(repository).findById(any());
         verify(repository).findById(NOT_EXISTING_ENTITY_ID);
         verify(repository, never()).save(same(entity));

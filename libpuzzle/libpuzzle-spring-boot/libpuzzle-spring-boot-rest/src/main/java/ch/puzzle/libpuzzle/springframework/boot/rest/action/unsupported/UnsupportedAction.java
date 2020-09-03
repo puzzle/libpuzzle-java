@@ -14,33 +14,33 @@ import org.springframework.http.ResponseEntity;
 
 public class UnsupportedAction<TEntity, TFilter, TIdentifier> implements
         CreateAction<TEntity>,
-        FindAction<TIdentifier>,
-        ListAction<TFilter>,
-        UpdateAction<TIdentifier>,
+        FindAction<TIdentifier, TEntity>,
+        ListAction<TEntity, TFilter>,
+        UpdateAction<TEntity, TIdentifier>,
         DeleteAction<TIdentifier> {
 
     @Override
-    public <TResponseDto> ResponseEntity<TResponseDto> execute(final CreateActionParameters<TEntity, ?, TResponseDto> params) {
+    public TEntity execute(final CreateActionParameters<TEntity, ?> params) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <TResponseDto> ResponseEntity<TResponseDto> execute(final FindActionParameters<TIdentifier, TResponseDto> params) {
+    public TEntity execute(final FindActionParameters<TIdentifier> params) {
         return null;
     }
 
     @Override
-    public <TResponseDto> ResponseEntity<Iterable<TResponseDto>> execute(final ListActionParameters<TFilter, TResponseDto> params) {
+    public Iterable<TEntity> execute(final ListActionParameters<TFilter> params) {
         return null;
     }
 
     @Override
-    public <TResponseDto> ResponseEntity<TResponseDto> execute(final UpdateActionParameters<TIdentifier, ?, TResponseDto> params) {
+    public TEntity execute(final UpdateActionParameters<TIdentifier, ?> params) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ResponseEntity<Void> execute(final DeleteActionParameters<TIdentifier> params) {
+    public Void execute(final DeleteActionParameters<TIdentifier> params) {
         throw new UnsupportedOperationException();
     }
 }

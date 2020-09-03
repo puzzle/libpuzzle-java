@@ -28,15 +28,15 @@ public class RepositoryActions<TEntity, TIdentifier> extends CrudActionFactory<T
         return new RepositoryCreateAction<>(repository, dtoMapper);
     }
 
-    public FindAction<TIdentifier> find() {
+    public FindAction<TIdentifier, TEntity> find() {
         return new RepositoryFindAction<>(repository, dtoMapper);
     }
 
-    public ListAction<Predicate<TEntity>> list() {
+    public ListAction<TEntity, Predicate<TEntity>> list() {
         return new RepositoryListAction<>(repository, dtoMapper);
     }
 
-    public UpdateAction<TIdentifier> update() {
+    public UpdateAction<TEntity, TIdentifier> update() {
         return new RepositoryUpdateAction<>(repository, dtoMapper);
     }
 

@@ -1,7 +1,9 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action.list;
 
-public interface ListActionBuilder<TFilter, TResponseDto, TBuilder
-        extends ListActionBuilder<TFilter, TResponseDto, TBuilder>> {
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.ResponseFactory;
+
+public interface ListActionBuilder<TFilter, TEntity, TBuilder
+        extends ListActionBuilder<TFilter, TEntity, TBuilder>> {
 
     TBuilder matching(TFilter filter);
 
@@ -9,6 +11,8 @@ public interface ListActionBuilder<TFilter, TResponseDto, TBuilder
 
     TBuilder limit(int limit);
 
-    <TNewResponseDto> Object execute(final Class<TNewResponseDto> responseDtoClass);
+    <TNewResponseDto> TNewResponseDto execute(final ResponseFactory<Iterable<TEntity>, TNewResponseDto, ListActionParameters<TFilter>> responseFactory);
+
+    <TNewResponseDto> Iterable<TNewResponseDto> execute(final Class<TNewResponseDto> responseDtoClass);
 
 }

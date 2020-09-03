@@ -5,6 +5,7 @@ import ch.puzzle.libpuzzle.springframework.boot.rest.action.delete.DeleteActionB
 import ch.puzzle.libpuzzle.springframework.boot.rest.test.actionmatcher.base.CrudActionConfigurer;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -23,7 +24,7 @@ public class DeleteActionConfigurer extends CrudActionConfigurer<DeleteActionBui
     protected DeleteActionBuilder<?> createActionBuilderMock() {
         var action = (DeleteActionBuilder<?>) mock(DeleteActionBuilder.class);
         doReturn(action).when(action).by(any());
-        doReturn(null).when(action).execute();
+        doNothing().when(action).execute();
         return action;
     }
 

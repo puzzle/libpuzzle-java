@@ -20,15 +20,15 @@ public final class CrudActionsConfig<TEntity, TIdentifier, TFilter, TCrudActions
 
     @Getter
     @With(AccessLevel.PRIVATE)
-    final FindAction<TIdentifier> findAction;
+    final FindAction<TIdentifier, TEntity> findAction;
 
     @Getter
     @With(AccessLevel.PRIVATE)
-    final ListAction<TFilter> listAction;
+    final ListAction<TEntity, TFilter> listAction;
 
     @Getter
     @With(AccessLevel.PRIVATE)
-    final UpdateAction<TIdentifier> updateAction;
+    final UpdateAction<TEntity, TIdentifier> updateAction;
 
     @Getter
     @With(AccessLevel.PRIVATE)
@@ -59,19 +59,19 @@ public final class CrudActionsConfig<TEntity, TIdentifier, TFilter, TCrudActions
     }
 
     public final CrudActionsConfig<TEntity, TIdentifier, TFilter, TCrudActions> with(
-            final FindAction<TIdentifier> action
+            final FindAction<TIdentifier, TEntity> action
     ) {
         return withFindAction(action);
     }
 
     public final CrudActionsConfig<TEntity, TIdentifier, TFilter, TCrudActions> with(
-            final ListAction<TFilter> action
+            final ListAction<TEntity, TFilter> action
     ) {
         return withListAction(action);
     }
 
     public final CrudActionsConfig<TEntity, TIdentifier, TFilter, TCrudActions> with(
-            final UpdateAction<TIdentifier> action
+            final UpdateAction<TEntity, TIdentifier> action
     ) {
         return withUpdateAction(action);
     }

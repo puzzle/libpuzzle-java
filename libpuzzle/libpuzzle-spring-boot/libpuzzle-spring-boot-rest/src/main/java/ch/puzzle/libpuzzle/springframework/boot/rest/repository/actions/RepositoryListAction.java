@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @RequiredArgsConstructor
-public class RepositoryListAction<TEntity> implements ListAction<Predicate<TEntity>> {
+public class RepositoryListAction<TEntity> implements ListAction<TEntity, Predicate<TEntity>> {
 
     private final Predicate<TEntity> DEFAULT_FILTER = (entity) -> true;
 
@@ -27,13 +27,11 @@ public class RepositoryListAction<TEntity> implements ListAction<Predicate<TEnti
     }
 
     @Override
-    public <TResponseDto> ResponseEntity<Iterable<TResponseDto>> execute(final ListActionParameters<Predicate<TEntity>, TResponseDto> params) {
-        List<TResponseDto> list = StreamSupport.stream(repository.findAll().spliterator(), true)
+    public Iterable<TEntity> execute(final ListActionParameters<Predicate<TEntity>> params) {
+        return StreamSupport.stream(repository.findAll().spliterator(), true)
                 .filter(params.filter().orDefault(DEFAULT_FILTER))
                 .skip(params.offset().get())
                 .limit(params.limit().get())
-                .map(entity -> mapper.map(entity, params.responseDtoClass().get()))
                 .collect(Collectors.toList());
-        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

@@ -1,30 +1,32 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action.create;
 
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.ActionParameter;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.ActionContext;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.MappingResponseFactory;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.ResponseFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.With;
-import org.springframework.http.ResponseEntity;
 
 @RequiredArgsConstructor
-public final class CreateActionExecution<TEntity, TDto, TResponseDto> implements
-        CreateActionBuilder<TEntity, TDto, TResponseDto>, CreateActionParameters<TEntity, TDto, TResponseDto> {
+public final class CreateActionExecution<TEntity, TDto> implements
+        CreateActionBuilder<TEntity, TDto>, CreateActionParameters<TEntity, TDto> {
 
     @With(AccessLevel.PRIVATE)
     private final ActionParameter<TEntity> entity;
 
     private final ActionParameter<TDto> requestDto;
 
-    private final ActionParameter<Class<TResponseDto>> responseDtoClass;
-
     private final CreateAction<TEntity> action;
 
-    public CreateActionExecution(final CreateAction<TEntity> action) {
+    private final ActionContext actionContext;
+
+    public CreateActionExecution(final CreateAction<TEntity> action, ActionContext actionContext) {
         this(
                 ActionParameter.empty(CreateActionBuilder.class, "using"),
                 ActionParameter.empty(CreateActionBuilder.class, "with"),
-                ActionParameter.empty(CreateActionBuilder.class, "execute"),
-                action
+                action,
+                actionContext
         );
     }
 
@@ -39,34 +41,28 @@ public final class CreateActionExecution<TEntity, TDto, TResponseDto> implements
     }
 
     @Override
-    public ActionParameter<Class<TResponseDto>> responseDtoClass() {
-        return responseDtoClass;
-    }
-
-    @Override
-    public CreateActionBuilder<TEntity, TDto, TResponseDto> using(final TEntity initialEntity) {
+    public CreateActionBuilder<TEntity, TDto> using(final TEntity initialEntity) {
         return withEntity(ActionParameter.holding(initialEntity));
     }
 
     @Override
-    public <TNewRequestDto> CreateActionBuilder<TEntity, TNewRequestDto, TResponseDto> with(
+    public <TNewRequestDto> CreateActionBuilder<TEntity, TNewRequestDto> with(
             final TNewRequestDto requestDto
     ) {
         return new CreateActionExecution<>(
                 entity,
                 ActionParameter.holding(requestDto),
-                responseDtoClass,
-                action
+                action,
+                actionContext
         );
     }
 
     @Override
-    public <TNewResponseDto> ResponseEntity<TNewResponseDto> execute(final Class<TNewResponseDto> responseDtoClass) {
-        return action.execute(new CreateActionExecution<>(
-                entity,
-                requestDto,
-                ActionParameter.holding(responseDtoClass),
-                action
-        ));
+    public <TNewResponseDto> TNewResponseDto execute(final ResponseFactory<TEntity, TNewResponseDto, CreateActionParameters<TEntity, TDto>> responseFactory) {
+        return responseFactory.create(action.execute(this), this, actionContext);
+    }
+
+    public <TNewResponseDto> TNewResponseDto execute(final Class<TNewResponseDto> responseDtoClass) {
+        return execute(MappingResponseFactory.mapTo(responseDtoClass));
     }
 }

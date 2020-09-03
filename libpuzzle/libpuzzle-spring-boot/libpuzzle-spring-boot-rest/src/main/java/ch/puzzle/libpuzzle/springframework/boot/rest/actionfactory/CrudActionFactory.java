@@ -13,11 +13,11 @@ public abstract class CrudActionFactory<TEntity, TIdentifier, TFilter> {
 
     public abstract CreateAction<TEntity> create();
 
-    public abstract FindAction<TIdentifier> find();
+    public abstract FindAction<TIdentifier, TEntity> find();
 
-    public abstract ListAction<TFilter> list();
+    public abstract ListAction<TEntity, TFilter> list();
 
-    public abstract UpdateAction<TIdentifier> update();
+    public abstract UpdateAction<TEntity, TIdentifier> update();
 
     public abstract DeleteAction<TIdentifier> delete();
 

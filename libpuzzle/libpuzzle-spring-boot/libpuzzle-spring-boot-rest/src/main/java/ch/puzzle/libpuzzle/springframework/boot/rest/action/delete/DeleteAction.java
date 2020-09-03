@@ -9,6 +9,6 @@ public interface DeleteAction<TIdentifier> {
         return new UnsupportedAction<>();
     }
 
-    ResponseEntity<Void> execute(DeleteActionParameters<TIdentifier> params);
+    Void execute(DeleteActionParameters<TIdentifier> params);
 
 }

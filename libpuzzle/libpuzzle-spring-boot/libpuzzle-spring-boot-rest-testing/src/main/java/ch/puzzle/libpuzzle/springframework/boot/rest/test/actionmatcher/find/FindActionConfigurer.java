@@ -23,7 +23,7 @@ public class FindActionConfigurer extends CrudActionConfigurer<FindActionBuilder
     protected FindActionBuilder<?, ?> createActionBuilderMock() {
         var action = (FindActionBuilder<?, ?>) mock(FindActionBuilder.class);
         doReturn(action).when(action).by(any());
-        doReturn(null).when(action).execute(any());
+        doReturn(null).when(action).execute(any(Class.class)); // FIXME: Handle ResponseFactory
         return action;
     }
 

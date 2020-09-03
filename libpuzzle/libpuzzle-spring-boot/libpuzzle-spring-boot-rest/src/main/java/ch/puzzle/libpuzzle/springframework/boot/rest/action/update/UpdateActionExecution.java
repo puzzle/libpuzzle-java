@@ -1,31 +1,34 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action.update;
 
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.ActionParameter;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.ActionContext;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.MappingResponseFactory;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.ResponseFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.With;
 import org.springframework.http.ResponseEntity;
 
 @RequiredArgsConstructor
-public final class UpdateActionExecution<TEntity, TIdentifier, TRequestDto, TResponseDto> implements
-        UpdateActionBuilder<TEntity, TIdentifier, TRequestDto, TResponseDto>,
-        UpdateActionParameters<TIdentifier, TRequestDto, TResponseDto> {
+public final class UpdateActionExecution<TEntity, TIdentifier, TRequestDto> implements
+        UpdateActionBuilder<TEntity, TIdentifier, TRequestDto>,
+        UpdateActionParameters<TIdentifier, TRequestDto> {
 
     @With(AccessLevel.PRIVATE)
     private final ActionParameter<TIdentifier> identifier;
 
     private final ActionParameter<TRequestDto> requestDto;
 
-    private final ActionParameter<Class<TResponseDto>> responseDtoClass;
+    private final UpdateAction<TEntity, TIdentifier> action;
 
-    private final UpdateAction<TIdentifier> action;
+    private final ActionContext actionContext;
 
-    public UpdateActionExecution(final UpdateAction<TIdentifier> action) {
+    public UpdateActionExecution(final UpdateAction<TEntity, TIdentifier> action, final ActionContext actionContext) {
         this(
                 ActionParameter.empty(UpdateActionBuilder.class, "by"),
                 ActionParameter.empty(UpdateActionBuilder.class, "with"),
-                ActionParameter.empty(UpdateActionBuilder.class, "execute"),
-                action
+                action,
+                actionContext
         );
     }
 
@@ -40,34 +43,29 @@ public final class UpdateActionExecution<TEntity, TIdentifier, TRequestDto, TRes
     }
 
     @Override
-    public ActionParameter<Class<TResponseDto>> responseDtoClass() {
-        return responseDtoClass;
-    }
-
-    @Override
-    public UpdateActionBuilder<TEntity, TIdentifier, TRequestDto, TResponseDto> by(final TIdentifier identifier) {
+    public UpdateActionBuilder<TEntity, TIdentifier, TRequestDto> by(final TIdentifier identifier) {
         return withIdentifier(ActionParameter.holding(identifier));
     }
 
     @Override
-    public <TNewRequestDto> UpdateActionBuilder<TEntity, TIdentifier, TNewRequestDto, TResponseDto> with(
+    public <TNewRequestDto> UpdateActionBuilder<TEntity, TIdentifier, TNewRequestDto> with(
             final TNewRequestDto requestDto
     ) {
         return new UpdateActionExecution<>(
                 identifier,
                 ActionParameter.holding(requestDto),
-                responseDtoClass,
-                action
+                action,
+                actionContext
         );
     }
 
     @Override
-    public <TNewResponseDto> ResponseEntity<TNewResponseDto> execute(final Class<TNewResponseDto> responseDtoClass) {
-        return action.execute(new UpdateActionExecution<>(
-                identifier,
-                requestDto,
-                ActionParameter.holding(responseDtoClass),
-                action
-        ));
+    public <TNewResponseDto> TNewResponseDto execute(final ResponseFactory<TEntity, TNewResponseDto, UpdateActionParameters<TIdentifier, TRequestDto>> responseFactory) {
+        return responseFactory.create(action.execute(this), this, actionContext);
+    }
+
+    @Override
+    public <TNewResponseDto> TNewResponseDto execute(final Class<TNewResponseDto> responseDtoClass) {
+        return execute(MappingResponseFactory.mapTo(responseDtoClass));
     }
 }

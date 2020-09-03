@@ -27,7 +27,7 @@ public class ListActionConfigurer extends CrudActionConfigurer<ListActionExecuti
         doReturn(action).when(action).skip(anyInt());
         doReturn(action).when(action).limit(anyInt());
         doReturn(action).when(action).matching(any());
-        doReturn(null).when(action).execute(any());
+        doReturn(null).when(action).execute(any(Class.class)); // FIXME: Handle ResponseFactory
         return action;
     }
 

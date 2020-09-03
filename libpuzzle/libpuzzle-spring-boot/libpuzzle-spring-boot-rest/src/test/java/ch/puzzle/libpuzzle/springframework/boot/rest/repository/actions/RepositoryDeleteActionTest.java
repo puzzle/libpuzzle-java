@@ -40,18 +40,14 @@ public class RepositoryDeleteActionTest {
 
     @Test
     public void testExistingEntity() {
-        var response = action.execute(params);
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        assertNull(response.getBody());
+        action.execute(params);
         verify(repository).deleteById(EXISTING_ENTITY_ID);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class) // FIXME
     public void testEntityNotFound() {
         doReturn(ActionParameter.holding(NOT_EXISTING_ENTITY_ID)).when(params).identifier();
         var response = action.execute(params);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertNull(response.getBody());
         verify(repository, never()).deleteById(any());
     }
 }

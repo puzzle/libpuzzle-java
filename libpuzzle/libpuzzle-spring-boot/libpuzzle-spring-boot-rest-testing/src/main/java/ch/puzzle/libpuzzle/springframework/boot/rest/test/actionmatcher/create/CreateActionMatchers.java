@@ -11,7 +11,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
-public class CreateActionMatchers implements ActionMatchers<CreateActionBuilder<Object, ?, ?>> {
+public class CreateActionMatchers implements ActionMatchers<CreateActionBuilder<Object, ?>> {
 
     public static CreateActionMatchers createAction() {
         return new CreateActionMatchers();
@@ -23,7 +23,7 @@ public class CreateActionMatchers implements ActionMatchers<CreateActionBuilder<
     }
 
     public ActionResultMatcher executed() {
-        return result -> verify(result.action(this)).execute(any());
+        return result -> verify(result.action(this)).execute(any(Class.class)); // FIXME: Handle ResponseFactory
     }
 
     public ActionResultMatcher executed(Class<?> responseClass) {
@@ -31,7 +31,7 @@ public class CreateActionMatchers implements ActionMatchers<CreateActionBuilder<
     }
 
     public ActionResultMatcher notExecuted() {
-        return result -> verify(result.action(this), never()).execute(any());
+        return result -> verify(result.action(this), never()).execute(any(Class.class)); // FIXME: Handle ResponseFactory
     }
 
     public ActionResultMatcher executed(Matcher<Class<?>> matcher) {

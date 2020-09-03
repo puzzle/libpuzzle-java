@@ -11,21 +11,20 @@ import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class RepositoryFindAction<TEntity, TIdentifier> implements FindAction<TIdentifier> {
+public class RepositoryFindAction<TEntity, TIdentifier> implements FindAction<TIdentifier, TEntity> {
 
     private final CrudRepository<TEntity, TIdentifier> repository;
 
     private final DtoMapper mapper;
 
     @Override
-    public <TResponseDto> ResponseEntity<TResponseDto> execute(
-            final FindActionParameters<TIdentifier, TResponseDto> params
+    public TEntity execute(
+            final FindActionParameters<TIdentifier> params
     ) {
         Optional<TEntity> entity = repository.findById(params.identifier().get());
         if (entity.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new RuntimeException("404"); // FIXME
         }
-        TResponseDto dto = mapper.map(entity.get(), params.responseDtoClass().get());
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        return entity.get();
     }
 }

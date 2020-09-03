@@ -1,27 +1,25 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.repository.actions;
 
-import ch.puzzle.libpuzzle.springframework.boot.rest.mapper.DtoMapper;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.update.UpdateAction;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.update.UpdateActionParameters;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @RequiredArgsConstructor
-public class RepositoryUpdateAction<TEntity, TIdentifier> implements UpdateAction<TIdentifier> {
+public class RepositoryUpdateAction<TEntity, TIdentifier> implements UpdateAction<TEntity, TIdentifier> {
 
     private final CrudRepository<TEntity, TIdentifier> repository;
 
     private final DtoMapper mapper;
 
     @Override
-    public <TResponseDto> ResponseEntity<TResponseDto> execute(final UpdateActionParameters<TIdentifier, ?, TResponseDto> params) {
+    public TEntity execute(final UpdateActionParameters<TIdentifier, ?> params) {
         return repository.findById(params.identifier().get())
                 .map(entity -> mapAndSave(params.requestDto().get(), entity))
-                .map(entity -> mapper.map(entity, params.responseDtoClass().get()))
-                .map(responseDto -> new ResponseEntity<>(responseDto, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new RuntimeException("404")); // FIXME
     }
 
     private <TDto> TEntity mapAndSave(TDto dto, TEntity entity) {

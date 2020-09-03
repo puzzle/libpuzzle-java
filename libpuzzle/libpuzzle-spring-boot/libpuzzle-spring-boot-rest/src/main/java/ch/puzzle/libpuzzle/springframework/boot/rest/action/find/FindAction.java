@@ -3,12 +3,12 @@ package ch.puzzle.libpuzzle.springframework.boot.rest.action.find;
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.unsupported.UnsupportedAction;
 import org.springframework.http.ResponseEntity;
 
-public interface FindAction<TIdentifier> {
+public interface FindAction<TIdentifier, TEntity> {
 
-    static <TIdentifier> FindAction<TIdentifier> unsupported() {
+    static <TIdentifier, TEntity> FindAction<TIdentifier, TEntity> unsupported() {
         return new UnsupportedAction<>();
     }
 
-    <TResponseDto> ResponseEntity<TResponseDto> execute(FindActionParameters<TIdentifier, TResponseDto> params);
+    TEntity execute(FindActionParameters<TIdentifier> params);
 
 }

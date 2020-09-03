@@ -9,7 +9,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
-public class CreateActionConfigurer extends CrudActionConfigurer<CreateActionBuilder<?, ?, ?>> {
+public class CreateActionConfigurer extends CrudActionConfigurer<CreateActionBuilder<?, ?>> {
 
     private CreateActionConfigurer(CrudActions<?, ?, ?> crudActions) {
         super(crudActions);
@@ -20,21 +20,21 @@ public class CreateActionConfigurer extends CrudActionConfigurer<CreateActionBui
     }
 
     @Override
-    protected CreateActionBuilder<?, ?, ?> createActionBuilderMock() {
-        var action = (CreateActionBuilder<?, ?, ?>) mock(CreateActionBuilder.class);
+    protected CreateActionBuilder<?, ?> createActionBuilderMock() {
+        var action = (CreateActionBuilder<?, ?>) mock(CreateActionBuilder.class);
         doReturn(action).when(action).using(any());
         doReturn(action).when(action).with(any());
-        doReturn(null).when(action).execute(any());
+        doReturn(null).when(action).execute(any(Class.class)); // FIXME: Handle ResponseFactory
         return action;
     }
 
     @Override
-    protected CreateActionBuilder<?, ?, ?> createActionBuilderSpy() {
+    protected CreateActionBuilder<?, ?> createActionBuilderSpy() {
         return spy(crudActions.create());
     }
 
     @Override
-    protected void mockCrudActions(CrudActions<?, ?, ?> crudActions, CreateActionBuilder<?, ?, ?> action) {
+    protected void mockCrudActions(CrudActions<?, ?, ?> crudActions, CreateActionBuilder<?, ?> action) {
         doReturn(action).when(crudActions).create();
     }
 }

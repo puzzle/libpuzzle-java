@@ -23,7 +23,7 @@ public class FindActionMatchers implements ActionMatchers<FindActionBuilder<Obje
     }
 
     public ActionResultMatcher executed() {
-        return result -> verify(result.action(this)).execute(any());
+        return result -> verify(result.action(this)).execute(any(Class.class)); // FIXME: Handle ResponseFactory
     }
 
     public ActionResultMatcher executed(Class<?> responseClass) {
@@ -43,6 +43,6 @@ public class FindActionMatchers implements ActionMatchers<FindActionBuilder<Obje
     }
 
     public ActionResultMatcher notExecuted() {
-        return result -> verify(result.action(this), never()).execute(any());
+        return result -> verify(result.action(this), never()).execute(any(Class.class)); // FIXME: Handle ResponseFactory
     }
 }

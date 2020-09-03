@@ -18,11 +18,9 @@ public class RepositoryCreateAction<TEntity> implements CreateAction<TEntity> {
         this.mapper = mapper;
     }
 
-    public <TResponseDto> ResponseEntity<TResponseDto> execute(CreateActionParameters<TEntity, ?, TResponseDto> params) {
+    public TEntity execute(CreateActionParameters<TEntity, ?> params) {
         var entity = params.entity().get();
         mapper.map(params.requestDto().get(), entity);
-        var persistedEntity = repository.save(entity);
-        var responseDto = mapper.map(persistedEntity, params.responseDtoClass().get());
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        return repository.save(entity);
     }
 }

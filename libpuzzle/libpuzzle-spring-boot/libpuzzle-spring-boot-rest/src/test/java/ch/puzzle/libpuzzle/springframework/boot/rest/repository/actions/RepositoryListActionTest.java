@@ -32,7 +32,7 @@ public class RepositoryListActionTest {
     private RepositoryListAction<Object> action;
 
     @Mock
-    private ListActionParameters<Predicate<Object>, Object> params;
+    private ListActionParameters<Predicate<Object>> params;
 
     @Mock
     private CrudRepository<Object, String> repository;
@@ -46,33 +46,22 @@ public class RepositoryListActionTest {
     @Mock
     private Object entityTwo;
 
-    @Mock
-    private Object responseDtoOne;
-
-    @Mock
-    private Object responseDtoTwo;
-
     @Before
     public void setup() {
         action = new RepositoryListAction<>(repository, dtoMapper);
         when(repository.findAll()).thenReturn(List.of(entityOne, entityTwo));
-        when(dtoMapper.map(same(entityOne), eq(Object.class))).thenReturn(responseDtoOne);
-        when(dtoMapper.map(same(entityTwo), eq(Object.class))).thenReturn(responseDtoTwo);
         doReturn(ActionParameter.holding(0)).when(params).offset();
         doReturn(ActionParameter.holding(100)).when(params).limit();
-        doReturn(ActionParameter.holding(Object.class)).when(params).responseDtoClass();
         doReturn(ActionParameter.empty(ListActionBuilder.class, "matching")).when(params).filter();
     }
 
     @Test
     public void testListAll() {
         var response = action.execute(params);
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        var entries = StreamSupport.stream(response.getBody().spliterator(), false).collect(Collectors.toList());
+        var entries = StreamSupport.stream(response.spliterator(), false).collect(Collectors.toList());
         Assert.assertEquals(2, entries.size());
-        assertSame(responseDtoOne, entries.get(0));
-        assertSame(responseDtoTwo, entries.get(1));
+        assertSame(entityOne, entries.get(0));
+        assertSame(entityTwo, entries.get(1));
         verify(repository).findAll();
     }
 }

@@ -34,7 +34,7 @@ public class RepositoryFindActionTest {
     private RepositoryFindAction<Object, String> action;
 
     @Mock
-    private FindActionParameters<String, Object> params;
+    private FindActionParameters<String> params;
 
     @Mock
     private CrudRepository<Object, String> repository;
@@ -45,34 +45,27 @@ public class RepositoryFindActionTest {
     @Mock
     private Object entity;
 
-    @Mock
-    private Object responseDto;
-
     @Before
     public void setup() {
         action = new RepositoryFindAction<>(repository, dtoMapper);
         when(repository.findById(anyString())).thenReturn(Optional.empty());
         when(repository.findById(eq(EXISTING_ENTITY_ID))).thenReturn(Optional.of(entity));
-        when(dtoMapper.map(same(entity), eq(Object.class))).thenReturn(responseDto);
         doReturn(ActionParameter.holding(EXISTING_ENTITY_ID)).when(params).identifier();
-        doReturn(ActionParameter.holding(Object.class)).when(params).responseDtoClass();
     }
 
     @Test
     public void testExistingEntity() {
         var response = action.execute(params);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertSame(responseDto, response.getBody());
+        assertSame(response, entity);
         verify(repository).findById(any());
         verify(repository).findById(EXISTING_ENTITY_ID);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testEntityNotFound() {
         doReturn(ActionParameter.holding(NOT_EXISTING_ENTITY_ID)).when(params).identifier();
         var response = action.execute(params);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertNull(response.getBody());
+        assertNull(response);
         verify(repository).findById(any());
         verify(repository).findById(NOT_EXISTING_ENTITY_ID);
     }

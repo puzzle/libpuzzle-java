@@ -1,10 +1,12 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action.find;
 
-import org.springframework.http.ResponseEntity;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.ResponseFactory;
 
-public interface FindActionBuilder<TIdentifier, TResponseDto> {
+public interface FindActionBuilder<TIdentifier, TEntity> {
 
-    FindActionBuilder<TIdentifier, TResponseDto> by(TIdentifier identifier);
+    FindActionBuilder<TIdentifier, TEntity> by(TIdentifier identifier);
 
-    <TNewResponseDto> ResponseEntity<TNewResponseDto> execute(Class<TNewResponseDto> responseDtoClass);
+    <TNewResponseDto> TNewResponseDto execute(ResponseFactory<TEntity, TNewResponseDto, FindActionParameters<TIdentifier>> responseFactory);
+
+    <TNewResponseDto> TNewResponseDto execute(Class<TNewResponseDto> responseDtoClass);
 }

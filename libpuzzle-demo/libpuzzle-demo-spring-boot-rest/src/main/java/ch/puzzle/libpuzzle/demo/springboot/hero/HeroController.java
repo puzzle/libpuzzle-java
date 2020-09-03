@@ -25,21 +25,21 @@ public class HeroController {
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<HeroDto>> list() {
+    public Iterable<HeroDto> list() {
         return actions.list()
                 .matching(RepositoryListAction.allFilter())
                 .execute(HeroDto.class);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<HeroDto> find(@PathVariable long id) {
+    public HeroDto find(@PathVariable long id) {
         return actions.find()
                 .by(id)
                 .execute(HeroDto.class);
     }
 
     @PostMapping
-    public ResponseEntity<HeroDto> create(@RequestBody @Valid HeroDto dto) {
+    public HeroDto create(@RequestBody @Valid HeroDto dto) {
         return actions.create()
                 .using(new Hero())
                 .with(dto)
@@ -47,7 +47,7 @@ public class HeroController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<HeroDto> update(@PathVariable long id, @RequestBody @Valid HeroDto dto) {
+    public HeroDto update(@PathVariable long id, @RequestBody @Valid HeroDto dto) {
         return actions.update()
                 .by(id)
                 .with(dto)
@@ -55,7 +55,7 @@ public class HeroController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(@PathVariable long id) {
+    public Void delete(@PathVariable long id) {
         return actions.delete()
                 .by(id)
                 .execute();

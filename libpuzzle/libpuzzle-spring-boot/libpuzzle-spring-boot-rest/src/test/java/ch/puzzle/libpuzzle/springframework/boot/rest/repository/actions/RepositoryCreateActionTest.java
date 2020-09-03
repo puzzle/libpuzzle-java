@@ -28,7 +28,7 @@ public class RepositoryCreateActionTest {
     private RepositoryCreateAction<Object> action;
 
     @Mock
-    private CreateActionParameters<Object, Object, Object> params;
+    private CreateActionParameters<Object, Object> params;
 
     @Mock
     private CrudRepository<Object, String> repository;
@@ -45,27 +45,19 @@ public class RepositoryCreateActionTest {
     @Mock
     private Object requestDto;
 
-    @Mock
-    private Object responseDto;
-
-
     @Before
     public void setup() {
         action = new RepositoryCreateAction<>(repository, dtoMapper);
-        when(dtoMapper.map(same(persistedEntity), eq(Object.class))).thenReturn(responseDto);
         when(repository.save(any())).thenReturn(persistedEntity);
         doReturn(ActionParameter.holding(requestDto)).when(params).requestDto();
         doReturn(ActionParameter.holding(initialEntity)).when(params).entity();
-        doReturn(ActionParameter.holding(Object.class)).when(params).responseDtoClass();
     }
 
     @Test
     public void testCreateEntity() {
         var response = action.execute(params);
-        Assert.assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertSame(responseDto, response.getBody());
+        assertSame(persistedEntity, response);
         verify(repository).save(same(initialEntity));
         verify(dtoMapper).map(same(requestDto), same(initialEntity));
-        verify(dtoMapper).map(same(persistedEntity), eq(Object.class));
     }
 }

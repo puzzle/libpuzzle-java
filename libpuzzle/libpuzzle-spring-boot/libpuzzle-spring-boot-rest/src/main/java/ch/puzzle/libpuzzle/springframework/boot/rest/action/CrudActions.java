@@ -23,23 +23,23 @@ public abstract class CrudActions<TEntity, TIdentifier, TFilter> extends Configu
         return new CrudActionsConfig<>(actions);
     }
 
-    public CreateActionBuilder<TEntity, Object, Object> create() {
-        return new CreateActionExecution<>(config.createAction);
+    public CreateActionBuilder<TEntity, Object> create() {
+        return new CreateActionExecution<>(config.createAction, null);
     }
 
-    public FindActionBuilder<TIdentifier, Object> find() {
-        return new FindActionExecution<>(config.findAction);
+    public FindActionBuilder<TIdentifier, TEntity> find() {
+        return new FindActionExecution<>(config.findAction, null);
     }
 
-    public ListActionExecution<TFilter, Object> list() {
-        return new ListActionExecution<>(config.listAction, defaultListOffset, defaultListLimit);
+    public ListActionExecution<TFilter, TEntity> list() {
+        return new ListActionExecution<>(config.listAction, null, defaultListOffset, defaultListLimit);
     }
 
-    public UpdateActionBuilder<TEntity, TIdentifier, Object, Object> update() {
-        return new UpdateActionExecution<>(config.updateAction);
+    public UpdateActionBuilder<TEntity, TIdentifier, Object> update() {
+        return new UpdateActionExecution<>(config.updateAction, null);
     }
 
     public DeleteActionBuilder<TIdentifier> delete() {
-        return new DeleteActionExecution<>(config.deleteAction);
+        return new DeleteActionExecution<>(config.deleteAction, null);
     }
 }

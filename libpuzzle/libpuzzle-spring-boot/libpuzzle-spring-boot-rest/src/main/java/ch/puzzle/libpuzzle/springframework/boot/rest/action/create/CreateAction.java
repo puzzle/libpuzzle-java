@@ -9,6 +9,6 @@ public interface CreateAction<TEntity> {
         return new UnsupportedAction<>();
     }
 
-    <TResponseDto> ResponseEntity<TResponseDto> execute(CreateActionParameters<TEntity, ?, TResponseDto> actionExecution);
+    TEntity execute(CreateActionParameters<TEntity, ?> actionExecution);
 
 }

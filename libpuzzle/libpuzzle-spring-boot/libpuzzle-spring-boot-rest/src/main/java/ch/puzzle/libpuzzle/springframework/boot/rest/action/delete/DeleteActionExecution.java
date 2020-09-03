@@ -1,6 +1,9 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action.delete;
 
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.ActionParameter;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.ActionContext;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.MappingResponseFactory;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.ResponseFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.With;
@@ -16,10 +19,13 @@ public final class DeleteActionExecution<TIdentifier> implements
 
     private final DeleteAction<TIdentifier> action;
 
-    public DeleteActionExecution(final DeleteAction<TIdentifier> action) {
+    private final ActionContext actionContext;
+
+    public DeleteActionExecution(final DeleteAction<TIdentifier> action, ActionContext actionContext) {
         this(
                 ActionParameter.empty(DeleteActionBuilder.class, "by"),
-                action
+                action,
+                actionContext
         );
     }
 
@@ -34,7 +40,12 @@ public final class DeleteActionExecution<TIdentifier> implements
     }
 
     @Override
-    public ResponseEntity<Void> execute() {
-        return action.execute(this);
+    public <TNewResponseDto> TNewResponseDto execute(final ResponseFactory<Void, TNewResponseDto, DeleteActionParameters<TIdentifier>> responseFactory) {
+        return responseFactory.create(action.execute(this), this, actionContext);
+    }
+
+    @Override
+    public Void execute() {
+        return execute(MappingResponseFactory.mapTo(Void.class));
     }
 }

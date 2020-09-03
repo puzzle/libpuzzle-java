@@ -1,28 +1,31 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action.find;
 
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.ActionParameter;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.ActionContext;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.MappingResponseFactory;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.ResponseFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.With;
 import org.springframework.http.ResponseEntity;
 
 @RequiredArgsConstructor
-public final class FindActionExecution<TIdentifier, TResponseDto> implements
-        FindActionBuilder<TIdentifier, TResponseDto>,
-        FindActionParameters<TIdentifier, TResponseDto> {
+public final class FindActionExecution<TIdentifier, TEntity> implements
+        FindActionBuilder<TIdentifier, TEntity>,
+        FindActionParameters<TIdentifier> {
 
     @With(AccessLevel.PRIVATE)
     private final ActionParameter<TIdentifier> identifier;
 
-    private final ActionParameter<Class<TResponseDto>> responseDtoClass;
+    private final FindAction<TIdentifier, TEntity> action;
 
-    private final FindAction<TIdentifier> action;
+    private final ActionContext actionContext;
 
-    public FindActionExecution(final FindAction<TIdentifier> action) {
+    public FindActionExecution(final FindAction<TIdentifier, TEntity> action, ActionContext actionContext) {
         this(
                 ActionParameter.empty(FindActionBuilder.class, "by"),
-                ActionParameter.empty(FindActionBuilder.class, "execute"),
-                action
+                action,
+                actionContext
         );
     }
 
@@ -32,21 +35,17 @@ public final class FindActionExecution<TIdentifier, TResponseDto> implements
     }
 
     @Override
-    public ActionParameter<Class<TResponseDto>> responseDtoClass() {
-        return responseDtoClass;
-    }
-
-    @Override
-    public FindActionBuilder<TIdentifier, TResponseDto> by(final TIdentifier identifier) {
+    public FindActionBuilder<TIdentifier, TEntity> by(final TIdentifier identifier) {
         return withIdentifier(ActionParameter.holding(identifier));
     }
 
     @Override
-    public <TNewResponseDto> ResponseEntity<TNewResponseDto> execute(final Class<TNewResponseDto> responseDtoClass) {
-        return action.execute(new FindActionExecution<>(
-                identifier,
-                ActionParameter.holding(responseDtoClass),
-                action
-        ));
+    public <TNewResponseDto> TNewResponseDto execute(final ResponseFactory<TEntity, TNewResponseDto, FindActionParameters<TIdentifier>> responseFactory) {
+        return responseFactory.create(action.execute(this), this, actionContext);
+    }
+
+    @Override
+    public <TNewResponseDto> TNewResponseDto execute(final Class<TNewResponseDto> responseDtoClass) {
+        return execute(MappingResponseFactory.mapTo(responseDtoClass));
     }
 }

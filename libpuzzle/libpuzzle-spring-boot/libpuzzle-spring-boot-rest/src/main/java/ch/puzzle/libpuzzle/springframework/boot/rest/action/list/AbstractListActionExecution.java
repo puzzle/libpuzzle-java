@@ -8,7 +8,7 @@ public abstract class AbstractListActionExecution<TFilter, TResponseDto, TExecut
         extends AbstractListActionExecution<TFilter, TResponseDto, TExecutor>>
         implements ListActionBuilder<TFilter, TResponseDto, TExecutor> {
 
-    protected final ListActionParameters<TFilter, TResponseDto> params;
+    protected final ListActionParameters<TFilter> params;
 
     @Override
     public TExecutor skip(final int offset) {
@@ -25,5 +25,5 @@ public abstract class AbstractListActionExecution<TFilter, TResponseDto, TExecut
         return withParams(params.withFilter(ActionParameter.holding(filter)));
     }
 
-    abstract protected TExecutor withParams(ListActionParameters<TFilter, TResponseDto> params);
+    abstract protected TExecutor withParams(ListActionParameters<TFilter> params);
 }

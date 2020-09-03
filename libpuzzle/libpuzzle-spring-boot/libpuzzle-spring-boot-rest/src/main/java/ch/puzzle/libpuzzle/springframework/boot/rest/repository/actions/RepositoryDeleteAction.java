@@ -13,12 +13,12 @@ public class RepositoryDeleteAction<TIdentifier> implements DeleteAction<TIdenti
     private final CrudRepository<?, TIdentifier> repository;
 
     @Override
-    public ResponseEntity<Void> execute(final DeleteActionParameters<TIdentifier> params) {
+    public Void execute(final DeleteActionParameters<TIdentifier> params) {
         var identifier = params.identifier();
         if (!repository.existsById(identifier.get())) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new RuntimeException("404"); // FIXME
         }
         repository.deleteById(identifier.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return null;
     }
 }

@@ -1,13 +1,15 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action.create;
 
-import org.springframework.http.ResponseEntity;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.ResponseFactory;
 
-public interface CreateActionBuilder<TEntity, TDto, TResponseDto> {
+public interface CreateActionBuilder<TEntity, TDto> {
 
-    CreateActionBuilder<TEntity, TDto, TResponseDto> using(TEntity initialEntity);
+    CreateActionBuilder<TEntity, TDto> using(TEntity initialEntity);
 
-    <TNewRequestDto> CreateActionBuilder<TEntity, TNewRequestDto, TResponseDto> with(TNewRequestDto requestDto);
+    <TNewRequestDto> CreateActionBuilder<TEntity, TNewRequestDto> with(TNewRequestDto requestDto);
 
-    <TNewResponseDto> ResponseEntity<TNewResponseDto> execute(Class<TNewResponseDto> responseDtoClass);
+    <TNewResponseDto> TNewResponseDto execute(ResponseFactory<TEntity, TNewResponseDto, CreateActionParameters<TEntity, TDto>> responseFactory);
+
+    <TNewResponseDto> TNewResponseDto execute(Class<TNewResponseDto> responseDtoClass);
 
 }

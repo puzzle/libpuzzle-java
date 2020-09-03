@@ -1,6 +1,8 @@
 package ch.puzzle.libpuzzle.springframework.boot.rest.action.list;
 
 import ch.puzzle.libpuzzle.springframework.boot.rest.action.ParameterNotSetException;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapper.DtoMapper;
+import ch.puzzle.libpuzzle.springframework.boot.rest.mapping.ActionContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,11 +23,14 @@ public class ListActionExecutionTest {
     private ListActionExecution<Object, Object> execution;
 
     @Mock
-    private ListAction<Object> action;
+    private ListAction<Object, Object> action;
+
+    @Mock
+    private ActionContext actionContext;
 
     @Before
     public void setup() {
-        execution = new ListActionExecution<>(action, DEFAULT_OFFSET, DEFAULT_LIMIT);
+        execution = new ListActionExecution<>(action, actionContext, DEFAULT_OFFSET, DEFAULT_LIMIT);
     }
 
     @Test
@@ -45,11 +50,6 @@ public class ListActionExecutionTest {
         execution.params.filter().get();
     }
 
-    @Test(expected = ParameterNotSetException.class)
-    public void testResponseDtoClassIsRequired() {
-        execution.params.responseDtoClass().get();
-    }
-
     @Test
     public void testParamsAreSetCorrectly() {
         var offset = 10;
@@ -60,8 +60,7 @@ public class ListActionExecutionTest {
         verify(action).execute(argThat(params ->
                 params.filter().get() == filter &&
                         params.offset().get() == offset &&
-                        params.limit().get() == limit &&
-                        params.responseDtoClass().get() == responseDtoClass
+                        params.limit().get() == limit
         ));
     }
 }
